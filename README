@@ -1,0 +1,3 @@
+Gedi is simple library for processing business documents structured according to Electronic Data
+Interchange (EDI) standards. And because Gedi written in Groovy, an elegant new JVM dynamic language,
+you can still use your favorite Java libraries and deploy and merge in your JVM based application/container
