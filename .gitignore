@@ -1,2 +1,7 @@
 .gradle/
 build/
+# Idea project files
+Gedi.iml
+Gedi.ipr
+Gedi.iws
+
