@@ -13,6 +13,16 @@ import org.testng.annotations.Test
 class EDIBuilderTest {
 
   @Test
+  public void testWithoutUNASegment() throws Exception {
+
+    StringWriter sw = new StringWriter()
+    EDIBuilder ediBuilder = new EDIBuilder(sw)
+    ediBuilder.writeUNA(sw)
+
+    Assert.assertEquals(sw.toString(), "");
+  }
+
+  @Test
   public void testDefaultUNASegment() throws Exception {
 
     StringWriter sw = new StringWriter()

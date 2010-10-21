@@ -1,5 +1,6 @@
 package info.sargis
 
+import info.sargis.model.Segment
 import info.sargis.model.UNASegment
 
 /**
@@ -12,13 +13,19 @@ import info.sargis.model.UNASegment
 class EDIBuilder {
 
   Writer out
-  UNASegment unaSegment
+
+  boolean writeUNASegment = false
+
+  Segment unaSegment = new UNASegment()
+  Segment unbSegment
+  Segment unzSegment
 
   def EDIBuilder(Writer writer) {
     this.out = writer
   }
 
   def withUna(Map params) {
+    writeUNASegment = true
     unaSegment = new UNASegment(
             cdes: params.cdes, des: params.des, decn: params.decn, ri: params.ri, rs: params.rs, st: params.st
     )
@@ -26,7 +33,7 @@ class EDIBuilder {
   }
 
   def withDefaultUna() {
-    unaSegment = new UNASegment()
+    writeUNASegment = true
     return this
   }
 
@@ -50,13 +57,17 @@ class EDIBuilder {
    * EDI 'Service String Advice' segment
    */
   def writeUNA(Writer writer) {
-    writer.write(unaSegment.toSegment())
+    if (writeUNASegment) {
+      writer.write(unaSegment.toSegment())
+    }
   }
 
   /**
    * EDI 'Interchange Header' segment
    */
   def writeUNB(Writer writer) {
+    assert unbSegment
+    writer.write(unbSegment.toSegment())
   }
 
   /**
