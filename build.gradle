@@ -1,15 +1,17 @@
 apply plugin: 'idea'
 apply plugin: 'groovy'
 
-sourceCompatibility=1.6
+sourceCompatibility = 1.6
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    groovy group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.7.+'
-    testCompile group: 'org.testng', name: 'testng', version: '5.14.+'
+  groovy group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.7.+'
+  testCompile group: 'org.testng', name: 'testng', version: '5.14.+'
 }
 
-
+test {
+  useTestNG()
+}
