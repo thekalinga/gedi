@@ -57,6 +57,15 @@ class EDIBuilder extends BuilderSupport {
 
   }
 
+  protected void nodeCompleted(Object parent, Object node) {
+    segmentBuffer.append(unaSegment.st)
+    writer.write(segmentBuffer.toString())
+    writer.flush()
+
+    segmentBuffer = null;
+  }
+
+
   protected Object createNode(Object name) {
     return createNode(name, Collections.EMPTY_LIST);
   }
@@ -70,21 +79,6 @@ class EDIBuilder extends BuilderSupport {
     return segmentBuffer;
   }
 
-  protected Object createNode(Object name, Map attributes, Object value) {
-    LOGGER.warn("Not support builder method call: createNode(Object name, Map attributes, Object value)")
-  }
-
-  protected Object createNode(Object name, Map attributes) {
-    LOGGER.warn("Not support builder method call: createNode(Object name, Map attributes)")
-  }
-
-  protected void nodeCompleted(Object parent, Object node) {
-    segmentBuffer.append(unaSegment.st)
-    writer.write(segmentBuffer.toString())
-    writer.flush()
-
-    segmentBuffer = null;
-  }
 
   String cde() {
     cde(Collections.EMPTY_MAP)
@@ -99,6 +93,7 @@ class EDIBuilder extends BuilderSupport {
     }
   }
 
+
   String sde() {
     sde(null)
   }
@@ -110,6 +105,7 @@ class EDIBuilder extends BuilderSupport {
     }
   }
 
+  
   def setText(StringBuilder sb, Object value) {
     if (value instanceof List) {
       sb.append(value.join(unaSegment.cdes))
@@ -120,6 +116,14 @@ class EDIBuilder extends BuilderSupport {
 
   def writeNewLine() {
     writer.write(EOL)
+  }
+
+  protected Object createNode(Object name, Map attributes, Object value) {
+    LOGGER.warn("Not support builder method call: createNode(Object name, Map attributes, Object value)")
+  }
+
+  protected Object createNode(Object name, Map attributes) {
+    LOGGER.warn("Not support builder method call: createNode(Object name, Map attributes)")
   }
 
 }
