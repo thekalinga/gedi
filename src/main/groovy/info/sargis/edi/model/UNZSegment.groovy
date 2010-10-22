@@ -1,4 +1,4 @@
-package info.sargis.model
+package info.sargis.edi.model
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -7,13 +7,15 @@ package info.sargis.model
  * User: Sargis Harutyunyan
  * Date: Oct 21, 2010
  */
-class UNHSegment implements Segment {
+class UNZSegment implements Segment {
 
   UNASegment una
-  String ref
+
+  Integer numbersOfMessages = 1
+  String interchangeControlReference
 
   String toSegment() {
-    return "UNH${una.des}${count}${una.des}${unb.ref}${una.st}";
+    return "UNZ${una.des}${numbersOfMessages}${una.des}${interchangeControlReference}${una.st}";
   }
 
 }

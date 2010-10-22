@@ -1,4 +1,4 @@
-package info.sargis.model
+package info.sargis.edi.model
 
 /**
  * Copyrights 2002-2010 Webb Fontaine

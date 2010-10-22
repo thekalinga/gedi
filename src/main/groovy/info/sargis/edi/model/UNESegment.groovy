@@ -1,4 +1,4 @@
-package info.sargis.model
+package info.sargis.edi.model
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -7,13 +7,15 @@ package info.sargis.model
  * User: Sargis Harutyunyan
  * Date: Oct 21, 2010
  */
-class UNGSegment implements Segment {
+class UNESegment implements Segment {
 
   UNASegment una
-  String ref
+
+  Integer numbersOfMessages = 1
+  String functionalGroupRefNumber
 
   String toSegment() {
-    return "UNG${una.des}${count}${una.des}${unb.ref}${una.st}";
+    return "UNE${una.des}${numbersOfMessages}${una.des}${functionalGroupRefNumber}${una.st}";
   }
 
 }

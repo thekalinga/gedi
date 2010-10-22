@@ -1,4 +1,4 @@
-package info.sargis.model
+package info.sargis.edi.model;
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -7,12 +7,6 @@ package info.sargis.model
  * User: Sargis Harutyunyan
  * Date: Oct 21, 2010
  */
-class UNBSegment implements Segment {
-
-  String toSegment() {
-    return "UNB";
-  }
-
+public interface Segment {
+    String toSegment();
 }
-
-
