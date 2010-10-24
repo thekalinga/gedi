@@ -1,7 +1,6 @@
-package info.sargis.edi
+package info.sargis.gedi
 
-import info.sargis.edi.model.UNASegment
-import info.sargis.edi.model.UNZSegment
+import info.sargis.gedi.model.UNASegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -22,8 +21,7 @@ class EDIBuilder extends BuilderSupport {
   private StringBuilder segmentBuffer
   private UNASegment unaSegment = DEFAULT_UNA;
 
-  UNZSegment unbSegment = new UNZSegment()
-
+  def actions = []
   Writer writer
 
   def EDIBuilder() {
@@ -105,7 +103,7 @@ class EDIBuilder extends BuilderSupport {
     }
   }
 
-  
+
   def setText(StringBuilder sb, Object value) {
     if (value instanceof List) {
       sb.append(value.join(unaSegment.cdes))

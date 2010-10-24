@@ -8,12 +8,12 @@ repositories {
 }
 
 dependencies {
-  groovy group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.7.+'
-  groovy group: 'org.slf4j', name: 'slf4j-api', version: '1.6.+'
+  groovy group: 'org.codehaus.groovy', name: 'groovy-all', version: '1.7.5'
+  groovy group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
 
-  testCompile group: 'org.testng', name: 'testng', version: '5.14.+'
-  testRuntime group: 'ch.qos.logback', name: 'logback-core', version: '0.9.+'
-  testRuntime group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.+'
+  testCompile group: 'org.testng', name: 'testng', version: '5.14.1'
+  testRuntime group: 'ch.qos.logback', name: 'logback-core', version: '0.9.26'
+  testRuntime group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.26'
 }
 
 test {

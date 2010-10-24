@@ -1,4 +1,4 @@
-package info.sargis.edi
+package info.sargis.gedi
 
 import org.testng.Assert
 import org.testng.annotations.Test
