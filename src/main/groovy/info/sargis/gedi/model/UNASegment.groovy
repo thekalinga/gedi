@@ -7,7 +7,7 @@ package info.sargis.gedi.model
  * User: Sargis Harutyunyan
  * Date: Oct 21, 2010
  */
-class UNASegment implements Segment {
+class UNASegment extends EDISegment {
 
   String cdes = ":"
   String des = "+"
@@ -16,8 +16,12 @@ class UNASegment implements Segment {
   String rs = " "
   String st = "'"
 
-  String toSegment() {
-    return "UNA${cdes}${des}${decn}${ri}${rs}${st}";
+  def UNASegment() {
+    tagName = "UNA"
+  }
+
+  String toEDI() {
+    return "${tagName}${cdes}${des}${decn}${ri}${rs}${st}";
   }
 
 }

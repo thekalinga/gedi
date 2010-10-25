@@ -1,8 +1,8 @@
 package info.sargis.gedi
 
-import info.sargis.gedi.model.UNASegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import info.sargis.gedi.model.*
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -15,113 +15,75 @@ class EDIBuilder extends BuilderSupport {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIBuilder.class);
 
-  public static final String EOL = System.getProperty("line.separator");
-  public static final UNASegment DEFAULT_UNA = new UNASegment()
-
-  private StringBuilder segmentBuffer
-  private UNASegment unaSegment = DEFAULT_UNA;
-
+  private final EDIModel ediModel = new EDIModel()
   def actions = []
-  Writer writer
 
   def EDIBuilder() {
-  }
-
-  def EDIBuilder(Writer writer) {
-    this.writer = writer
-  }
-
-  def writeUna(Map params) {
-    unaSegment = new UNASegment(
-            cdes: params.cdes, des: params.des, decn: params.decn, ri: params.ri, rs: params.rs, st: params.st
-    )
-    writeUNA(writer, unaSegment)
-  }
-
-  def writeDefaultUna() {
-    writeUNA(writer, unaSegment)
-  }
-
-  /**
-   * EDI 'Service String Advice' segment
-   */
-  private def writeUNA(Writer wr, UNASegment una) {
-    wr.write(una.toSegment())
   }
 
   // ******************************** Builder support // ******************************** //
 
   protected void setParent(Object parent, Object child) {
+    switch (child) {
+      case UNASegment:
+        ediModel.unaSegment = child
+        break
+      case UNBSegment:
+        ediModel.unbSegment = child
+        ediModel.unzSegment = new UNZSegment(msgCount: 1, ctrlRef: ediModel.unbSegment.ctrlRef);
+        break
+      case UNGSegment:
+        ediModel.addUNGSegment(child)
+        ediModel.uneSegment = new UNESegment(
+                msgCount: 1, grpRefNbr: ediModel.ungSegment.grpRefNbr
+        );
+        break
+      case UNHSegment:
+        ediModel.addUNHSegment(child)
+        ediModel.untSegment = new UNTSegment(
+                msgCount: ediModel.getUserSegments().size(), msgRefNbr: ediModel.ungSegment.msgRefNbr
+        );
+        break
+      case Segment:
+        ediModel.addUserSegment(child)
+        break
+      default:
+        throw new EDIBuilderException("Cannot find case for object: " + child.class.getName())
+    }
 
   }
-
-  protected void nodeCompleted(Object parent, Object node) {
-    segmentBuffer.append(unaSegment.st)
-    writer.write(segmentBuffer.toString())
-    writer.flush()
-
-    segmentBuffer = null;
-  }
-
 
   protected Object createNode(Object name) {
-    return createNode(name, Collections.EMPTY_LIST);
+    switch (name) {
+      case "UNA":
+        return new UNASegment()
+      case "UNB":
+        return new UNBSegment()
+      case "UNG":
+        return new UNGSegment()
+      case "UNH":
+        return new UNHSegment()
+      default:
+        return new UserSegment(tagName: name)
+    }
   }
 
   protected Object createNode(Object name, Object value) {
-    segmentBuffer = new StringBuilder(name.toString())
-    if (value) {
-      segmentBuffer.append(unaSegment.cdes)
-      setText(segmentBuffer, value)
-    }
-    return segmentBuffer;
-  }
-
-
-  String cde() {
-    cde(Collections.EMPTY_MAP)
-  }
-
-  String cde(Map values) {
-    values.each { entry ->
-      segmentBuffer.append(unaSegment.des)
-      segmentBuffer.append(entry.key)
-      segmentBuffer.append(unaSegment.cdes)
-      setText(segmentBuffer, entry.value)
-    }
-  }
-
-
-  String sde() {
-    sde(null)
-  }
-
-  String sde(Object value) {
-    segmentBuffer.append(unaSegment.des)
-    if (value) {
-      segmentBuffer.append(value)
-    }
-  }
-
-
-  def setText(StringBuilder sb, Object value) {
-    if (value instanceof List) {
-      sb.append(value.join(unaSegment.cdes))
-    } else {
-      sb.append(value.toString())
-    }
-  }
-
-  def writeNewLine() {
-    writer.write(EOL)
-  }
-
-  protected Object createNode(Object name, Map attributes, Object value) {
-    LOGGER.warn("Not support builder method call: createNode(Object name, Map attributes, Object value)")
+    Object result = createNode(name)
+    return result;
   }
 
   protected Object createNode(Object name, Map attributes) {
-    LOGGER.warn("Not support builder method call: createNode(Object name, Map attributes)")
+    switch (name) {
+      case "UNA":
+        return new UNASegment(attributes)
+      default:
+        throw new EDIBuilderException("Create segment with attributes allowed only for UNA: Service String Advice");
+    }
+  }
+
+  protected Object createNode(Object name, Map attributes, Object value) {
+    throw new EDIBuilderException("Unsupported operation");
   }
 
 }

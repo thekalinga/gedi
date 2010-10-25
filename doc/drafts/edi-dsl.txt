@@ -1,3 +1,4 @@
+# version 1
     edi.UNB {
       cde("UNOB": 1)
       cde("gslg071": "ZZ")
@@ -9,6 +10,7 @@
     }
 
 
+# version 2
 edi.segment(UNB) {
 	segment(UNG) {
 		ds("UNOB": 1).ds("gcms003": "ZZ").ds(101013: 1129).de(1013115727000).de().de("CLSVAL")
@@ -18,7 +20,18 @@ edi.segment(UNB) {
 	}
 }
 
+# version 3 - Current
+edi.UNA() {
+    UNB {
+	    UNG {
+            ds("UNOB": 1).ds("gcms003": "ZZ").ds(101013: 1129).de(1013115727000).de().de("CLSVAL")
+            UNH {
 
+		    }
+	}
+}
+
+# version 4
 edi.segment(UNB) {
 	segment(UNG) {
 		de()
@@ -28,6 +41,3 @@ edi.segment(UNB) {
 		}
 	}
 }
-
-
-Scala is a general purpose programming language

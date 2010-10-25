@@ -14,13 +14,13 @@ class UNASegmentTest {
 
   @Test
   public void testDefaultUNASegment() throws Exception {
-    Assert.assertEquals(new UNASegment().toSegment(), "UNA:+.? '");
+    Assert.assertEquals(new UNASegment().toEDI(), "UNA:+.? '");
   }
 
   @Test
   public void testCustomUNASegment() throws Exception {
     UNASegment una = new UNASegment(cdes: "|", des: "-", decn: ",", ri: "!", rs: " ", st: "^")
-    Assert.assertEquals(una.toSegment(), "UNA|-,! ^");
+    Assert.assertEquals(una.toEDI(), "UNA|-,! ^");
   }
 
 }
