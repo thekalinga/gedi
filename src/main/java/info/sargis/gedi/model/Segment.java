@@ -8,5 +8,8 @@ package info.sargis.gedi.model;
  * Date: Oct 21, 2010
  */
 public interface Segment {
+
+    String EOL = System.getProperty("line.separator");
+
     String toEDI();
 }

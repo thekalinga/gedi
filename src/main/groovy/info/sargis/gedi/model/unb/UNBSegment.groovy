@@ -1,4 +1,6 @@
-package info.sargis.gedi.model
+package info.sargis.gedi.model.unb
+
+import info.sargis.gedi.model.EDISegment
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -7,13 +9,14 @@ package info.sargis.gedi.model
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class UNGSegment extends EDISegment {
+class UNBSegment extends EDISegment {
 
-  def UNGSegment() {
-    tagName = "UNG"
+  def UNBSegment() {
+    tagName = "UNB"
   }
 
   String toEDI() {
     return "${tagName}";
   }
+
 }

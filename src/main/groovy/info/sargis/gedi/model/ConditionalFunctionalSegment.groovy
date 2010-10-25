@@ -7,16 +7,15 @@ package info.sargis.gedi.model
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class UNZSegment extends EDISegment {
+class ConditionalFunctionalSegment extends FunctionalSegment {
 
-  Integer msgCount
-  String ctrlRef
+  def String toEDI() {
+    StringBuilder sb = new StringBuilder()
 
-  def UNZSegment() {
-    tagName = "UNZ"
+    messageSegments.each { seg ->
+      sb << seg.toEDI() << EOL
+    }
+    return sb.toString()
   }
 
-  String toEDI() {
-    return "${tagName}+${msgCount}+${ctrlRef}"
-  }
 }

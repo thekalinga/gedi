@@ -1,5 +1,8 @@
 package info.sargis.gedi
 
+import info.sargis.gedi.model.unb.UNBSegment
+import info.sargis.gedi.model.ung.UNGSegment
+import info.sargis.gedi.model.unh.UNHSegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import info.sargis.gedi.model.*
@@ -25,27 +28,33 @@ class EDIBuilder extends BuilderSupport {
 
   protected void setParent(Object parent, Object child) {
     switch (child) {
-      case UNASegment:
-        ediModel.unaSegment = child
+      case InterchangeMessage:
+        if (parent instanceof EDIModel) {
+          ediModel.interchangeMessage = child
+        } else {
+          throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
+        }
         break
-      case UNBSegment:
-        ediModel.unbSegment = child
-        ediModel.unzSegment = new UNZSegment(msgCount: 1, ctrlRef: ediModel.unbSegment.ctrlRef);
+      case FunctionalSegment:
+        if (parent instanceof InterchangeMessage) {
+          parent.addFunctionalSegment(child)
+        } else {
+          throw new EDIBuilderException("UNG segment can be added only to UNB");
+        }
         break
-      case UNGSegment:
-        ediModel.addUNGSegment(child)
-        ediModel.uneSegment = new UNESegment(
-                msgCount: 1, grpRefNbr: ediModel.ungSegment.grpRefNbr
-        );
-        break
-      case UNHSegment:
-        ediModel.addUNHSegment(child)
-        ediModel.untSegment = new UNTSegment(
-                msgCount: ediModel.getUserSegments().size(), msgRefNbr: ediModel.ungSegment.msgRefNbr
-        );
+      case MessageSegment:
+        if (parent instanceof FunctionalSegment) {
+          parent.addMessageSegment(child)
+        } else {
+          throw new EDIBuilderException("UNH segment can be added only to UNB or UNG segments");
+        }
         break
       case Segment:
-        ediModel.addUserSegment(child)
+        if (parent instanceof MessageSegment) {
+          parent.addUserSegment(child)
+        } else {
+          throw new EDIBuilderException("User data segment can be added only to UNH segment");
+        }
         break
       default:
         throw new EDIBuilderException("Cannot find case for object: " + child.class.getName())
@@ -55,31 +64,35 @@ class EDIBuilder extends BuilderSupport {
 
   protected Object createNode(Object name) {
     switch (name) {
-      case "UNA":
-        return new UNASegment()
       case "UNB":
-        return new UNBSegment()
+        InterchangeMessage interchangeMessage = new InterchangeMessage()
+        interchangeMessage.with {
+          unbSegment = new UNBSegment()
+        }
+        return interchangeMessage
       case "UNG":
-        return new UNGSegment()
+        FunctionalSegment functionalSegment = new FunctionalSegment()
+        functionalSegment.with {
+          ungSegment = new UNGSegment()
+        }
+        return functionalSegment
       case "UNH":
-        return new UNHSegment()
+        MessageSegment messageSegment = new MessageSegment()
+        messageSegment.with {
+          unhSegment = new UNHSegment()
+        }
+        return messageSegment
       default:
         return new UserSegment(tagName: name)
     }
   }
 
   protected Object createNode(Object name, Object value) {
-    Object result = createNode(name)
-    return result;
+    return createNode(name);
   }
 
   protected Object createNode(Object name, Map attributes) {
-    switch (name) {
-      case "UNA":
-        return new UNASegment(attributes)
-      default:
-        throw new EDIBuilderException("Create segment with attributes allowed only for UNA: Service String Advice");
-    }
+    throw new EDIBuilderException("Unsupported operation");
   }
 
   protected Object createNode(Object name, Map attributes, Object value) {

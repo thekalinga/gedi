@@ -9,6 +9,8 @@ package info.sargis.gedi;
  */
 public class EDIBuilderException extends RuntimeException {
 
+    private static final long serialVersionUID = -2058409450413388131L;
+
     public EDIBuilderException() {
     }
 
