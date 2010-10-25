@@ -19,7 +19,6 @@ class EDIBuilder extends BuilderSupport {
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIBuilder.class);
 
   private final EDIModel EDI_MODEL = new EDIModel()
-  def actions = []
 
   def EDIBuilder() {
   }
@@ -29,33 +28,50 @@ class EDIBuilder extends BuilderSupport {
   protected void setParent(Object parent, Object child) {
     switch (child) {
       case InterchangeMessage:
+
         if (parent instanceof EDIModel) {
           EDI_MODEL.interchangeMessage = child
         } else {
           throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
         }
         break
+
       case FunctionalSegment:
+
         if (parent instanceof InterchangeMessage) {
           parent.addFunctionalSegment(child)
         } else {
           throw new EDIBuilderException("UNG segment can be added only to UNB");
         }
         break
+
       case MessageSegment:
-        if (parent instanceof FunctionalSegment) {
+
+        if (parent instanceof InterchangeMessage) {
+          InterchangeMessage iMessage = (InterchangeMessage) parent
+
+          def segments = iMessage.getFunctionalSegments()
+          if (segments) {
+            FunctionalSegment functionalSegment = new ConditionalFunctionalSegment()
+            parent.addFunctionalSegment(functionalSegment)
+          }
+          segments[0].addMessageSegment(child)
+        } else if (parent instanceof FunctionalSegment) {
           parent.addMessageSegment(child)
         } else {
           throw new EDIBuilderException("UNH segment can be added only to UNB or UNG segments");
         }
         break
+
       case Segment:
+
         if (parent instanceof MessageSegment) {
           parent.addUserSegment(child)
         } else {
           throw new EDIBuilderException("User data segment can be added only to UNH segment");
         }
         break
+
       default:
         throw new EDIBuilderException("Cannot find case for object: " + child.class.getName())
     }
