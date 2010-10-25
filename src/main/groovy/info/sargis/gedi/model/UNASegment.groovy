@@ -1,5 +1,7 @@
 package info.sargis.gedi.model
 
+import static info.sargis.gedi.EDIConfig.EOL
+
 /**
  * Copyrights 2002-2010 Webb Fontaine
  * This software is the proprietary information of Webb Fontaine.
@@ -21,7 +23,7 @@ class UNASegment extends EDISegment {
   }
 
   String toEDI() {
-    return "${tagName}${cdes}${des}${decn}${ri}${rs}${st}";
+    return "${tagName}${cdes}${des}${decn}${ri}${rs}${st}${EOL}";
   }
 
 }

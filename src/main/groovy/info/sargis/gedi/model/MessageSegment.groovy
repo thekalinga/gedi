@@ -2,6 +2,7 @@ package info.sargis.gedi.model
 
 import info.sargis.gedi.model.unh.UNHSegment
 import info.sargis.gedi.model.unh.UNTSegment
+import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine

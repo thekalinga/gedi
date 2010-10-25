@@ -14,9 +14,7 @@ class EDIModel {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIModel.class);
 
-  private static final UNASegment DEFAULT_UNA = new UNASegment();
-
-  UNASegment unaSegment = DEFAULT_UNA
+  UNASegment unaSegment
   InterchangeMessage interchangeMessage
   Writer writer
 

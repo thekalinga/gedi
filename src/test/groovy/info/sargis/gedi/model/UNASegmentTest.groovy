@@ -2,6 +2,7 @@ package info.sargis.gedi.model
 
 import org.testng.Assert
 import org.testng.annotations.Test
+import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -14,13 +15,13 @@ class UNASegmentTest {
 
   @Test
   public void testDefaultUNASegment() throws Exception {
-    Assert.assertEquals(new UNASegment().toEDI(), "UNA:+.? '");
+    Assert.assertEquals(new UNASegment().toEDI(), "UNA:+.? '${EOL}");
   }
 
   @Test
   public void testCustomUNASegment() throws Exception {
     UNASegment una = new UNASegment(cdes: "|", des: "-", decn: ",", ri: "!", rs: " ", st: "^")
-    Assert.assertEquals(una.toEDI(), "UNA|-,! ^");
+    Assert.assertEquals(una.toEDI(), "UNA|-,! ^${EOL}");
   }
 
 }

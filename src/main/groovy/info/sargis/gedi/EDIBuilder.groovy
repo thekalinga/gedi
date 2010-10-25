@@ -18,9 +18,17 @@ class EDIBuilder extends BuilderSupport {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIBuilder.class);
 
-  private final EDIModel EDI_MODEL = new EDIModel()
+  private static final UNASegment DEFAULT_UNA = new UNASegment();
 
-  def EDIBuilder() {
+  private EDIModel ediModel
+
+  def EDIBuilder(Writer writer) {
+    ediModel = new EDIModel(writer)
+    ediModel.unaSegment = DEFAULT_UNA;
+  }
+
+  public void serviceStringAdvice(UNASegment unaSegment) {
+    ediModel.unaSegment = unaSegment
   }
 
   // ******************************** Builder support // ******************************** //
@@ -30,7 +38,7 @@ class EDIBuilder extends BuilderSupport {
       case InterchangeMessage:
 
         if (parent instanceof EDIModel) {
-          EDI_MODEL.interchangeMessage = child
+          ediModel.interchangeMessage = child
         } else {
           throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
         }
