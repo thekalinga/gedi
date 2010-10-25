@@ -18,7 +18,7 @@ class EDIBuilder extends BuilderSupport {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIBuilder.class);
 
-  private final EDIModel ediModel = new EDIModel()
+  private final EDIModel EDI_MODEL = new EDIModel()
   def actions = []
 
   def EDIBuilder() {
@@ -30,7 +30,7 @@ class EDIBuilder extends BuilderSupport {
     switch (child) {
       case InterchangeMessage:
         if (parent instanceof EDIModel) {
-          ediModel.interchangeMessage = child
+          EDI_MODEL.interchangeMessage = child
         } else {
           throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
         }
