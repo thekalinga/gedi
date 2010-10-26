@@ -12,6 +12,8 @@ import static info.sargis.gedi.EDIConfig.EOL
 class ConditionalFunctionalSegment extends FunctionalSegment {
 
   def String toEDI() {
+    assert messageSegments
+
     StringBuilder sb = new StringBuilder()
 
     messageSegments.each { seg ->

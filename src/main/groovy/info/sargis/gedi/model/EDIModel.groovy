@@ -26,6 +26,8 @@ class EDIModel {
   }
 
   def buildEDI() {
+    assert interchangeMessage
+
     writeSegment(unaSegment)
     writeSegment(interchangeMessage)
   }

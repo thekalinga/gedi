@@ -32,6 +32,9 @@ class FunctionalSegment implements Segment {
   }
 
   String toEDI() {
+    assert ungSegment
+    assert messageSegments
+
     StringBuilder sb = new StringBuilder()
 
     sb << ungSegment.toEDI() << EOL

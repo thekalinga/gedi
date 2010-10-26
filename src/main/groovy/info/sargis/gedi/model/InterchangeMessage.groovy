@@ -32,6 +32,9 @@ class InterchangeMessage implements Segment {
   }
 
   String toEDI() {
+    assert unbSegment
+    assert functionalSegments
+
     StringBuilder sb = new StringBuilder()
 
     sb << unbSegment.toEDI() << EOL

@@ -32,6 +32,8 @@ class MessageSegment implements Segment {
   }
 
   String toEDI() {
+    assert unhSegment
+
     StringBuilder sb = new StringBuilder()
 
     sb << unhSegment.toEDI() << EOL
