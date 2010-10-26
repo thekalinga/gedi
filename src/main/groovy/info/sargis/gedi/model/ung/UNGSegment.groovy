@@ -1,6 +1,7 @@
 package info.sargis.gedi.model.ung
 
 import info.sargis.gedi.model.EDISegment
+import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -11,12 +12,14 @@ import info.sargis.gedi.model.EDISegment
  */
 class UNGSegment extends EDISegment {
 
+  String msgRefNbr = "UNG0111DUMMY"
+
   def UNGSegment() {
     tagName = "UNG"
   }
 
   String toEDI() {
-    return "${tagName}";
+    return "${tagName}${EOL}";
   }
 
 }

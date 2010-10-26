@@ -2,7 +2,6 @@ package info.sargis.gedi.model
 
 import info.sargis.gedi.model.unh.UNHSegment
 import info.sargis.gedi.model.unh.UNTSegment
-import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -36,11 +35,11 @@ class MessageSegment implements Segment {
 
     StringBuilder sb = new StringBuilder()
 
-    sb << unhSegment.toEDI() << EOL
+    sb << unhSegment.toEDI()
     userSegments.each { seg ->
-      sb << seg.toEDI() << EOL
+      sb << seg.toEDI()
     }
-    sb << getUntSegment().toEDI() << EOL
+    sb << getUntSegment().toEDI()
 
     return sb.toString()
   }

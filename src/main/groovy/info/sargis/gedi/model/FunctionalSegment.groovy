@@ -2,7 +2,6 @@ package info.sargis.gedi.model
 
 import info.sargis.gedi.model.ung.UNESegment
 import info.sargis.gedi.model.ung.UNGSegment
-import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -37,11 +36,11 @@ class FunctionalSegment implements Segment {
 
     StringBuilder sb = new StringBuilder()
 
-    sb << ungSegment.toEDI() << EOL
+    sb << ungSegment.toEDI()
     messageSegments.each { seg ->
-      sb << seg.toEDI() << EOL
+      sb << seg.toEDI()
     }
-    sb << getUneSegment().toEDI() << EOL
+    sb << getUneSegment().toEDI()
 
     return sb.toString()
   }

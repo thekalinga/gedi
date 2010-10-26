@@ -1,6 +1,7 @@
 package info.sargis.gedi.model.unh
 
 import info.sargis.gedi.model.EDISegment
+import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -19,6 +20,6 @@ class UNTSegment extends EDISegment {
   }
 
   String toEDI() {
-    return "${tagName}+${msgCount}+${msgRefNbr}"
+    return "${tagName}+${msgCount}+${msgRefNbr}${EOL}"
   }
 }

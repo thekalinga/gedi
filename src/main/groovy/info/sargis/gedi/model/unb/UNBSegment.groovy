@@ -1,6 +1,7 @@
 package info.sargis.gedi.model.unb
 
 import info.sargis.gedi.model.EDISegment
+import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -11,12 +12,14 @@ import info.sargis.gedi.model.EDISegment
  */
 class UNBSegment extends EDISegment {
 
+  String msgRefNbr = "UNB0111DUMMY"
+
   def UNBSegment() {
     tagName = "UNB"
   }
 
   String toEDI() {
-    return "${tagName}";
+    return "${tagName}${EOL}";
   }
 
 }

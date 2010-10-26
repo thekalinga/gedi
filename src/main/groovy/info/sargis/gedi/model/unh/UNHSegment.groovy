@@ -1,6 +1,7 @@
 package info.sargis.gedi.model.unh
 
 import info.sargis.gedi.model.EDISegment
+import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -11,11 +12,13 @@ import info.sargis.gedi.model.EDISegment
  */
 class UNHSegment extends EDISegment {
 
+  String msgRefNbr = "UNH0111DUMMY"
+
   def UNHSegment() {
     tagName = "UNH"
   }
 
   String toEDI() {
-    return "${tagName}";
+    return "${tagName}${EOL}";
   }
 }
