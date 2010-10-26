@@ -16,6 +16,9 @@ class UserSegmentTest {
   public void testToEDI() throws Exception {
     def tag = "GCC"
     UserSegment segment = new UserSegment(tagName: tag)
-    Assert.assertEquals(segment.toEDI(), "${tag}${EOL}");
+    segment.data {
+      ["GCC", "", "XXX"] + 1222 + "ZSSS01"
+    }
+    Assert.assertEquals(segment.toEDI(), "${tag}+GCC::XXX+1222+ZSSS01'${EOL}");
   }
 }

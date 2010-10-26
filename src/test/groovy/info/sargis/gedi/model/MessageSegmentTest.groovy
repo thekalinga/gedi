@@ -25,9 +25,9 @@ class MessageSegmentTest {
 
     def expectedEDI = '''\
       UNH
-      C01
-      C22
-      C55
+      C01+'
+      C22+'
+      C55+'
       UNT+3+UNH0111DUMMY
     '''
     Assert.assertEquals(messageSegment.toEDI(), expectedEDI.stripIndent());

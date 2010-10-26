@@ -1,7 +1,5 @@
 package info.sargis.gedi.model
 
-import static info.sargis.gedi.EDIConfig.EOL
-
 /**
  * Copyrights 2002-2010 Webb Fontaine
  * This software is the proprietary information of Webb Fontaine.
@@ -10,7 +8,4 @@ import static info.sargis.gedi.EDIConfig.EOL
  * Date: Oct 25, 2010
  */
 class UserSegment extends EDISegment {
-  String toEDI() {
-    return "${tagName}${EOL}";
-  }
 }

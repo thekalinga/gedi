@@ -25,15 +25,15 @@ class InterchangeMessageTest {
       UNB
       UNG
       UNH
-      C01
-      C22
-      C55
+      C01+'
+      C22+'
+      C55+'
       UNT+3+UNH0111DUMMY
       UNE+1+UNG0111DUMMY
       UNG
       UNH
-      X01
-      X22
+      X01+'
+      X22+'
       UNT+2+UNH0111DUMMY
       UNE+1+UNG0111DUMMY
       UNZ+2+UNB0111DUMMY
@@ -54,13 +54,13 @@ class InterchangeMessageTest {
     def expectedEDI = '''\
       UNB
       UNH
-      C01
-      C22
-      C55
+      C01+'
+      C22+'
+      C55+'
       UNT+3+UNH0111DUMMY
       UNH
-      X01
-      X22
+      X01+'
+      X22+'
       UNT+2+UNH0111DUMMY
       UNZ+2+UNB0111DUMMY
       '''

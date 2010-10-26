@@ -23,6 +23,8 @@ class EDIBuilder extends BuilderSupport {
   private EDIModel ediModel
   private Writer writer
 
+  private Segment currentSegment
+
   def EDIBuilder(Writer writer) {
     this.writer = writer
     ediModel = new EDIModel()
@@ -41,8 +43,9 @@ class EDIBuilder extends BuilderSupport {
   // ******************************** Builder support // ******************************** //
 
   protected void setParent(Object parent, Object child) {
+
     LOGGER.debug("Parameters in setParent(): {}, {}", parent.class.name, child.class.name)
-    println("======================= " + child.class.name)
+
     switch (child) {
       case InterchangeMessage:
         throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
@@ -86,6 +89,7 @@ class EDIBuilder extends BuilderSupport {
         throw new EDIBuilderException("Cannot find case for object: " + child.class.getName())
     }
 
+    currentSegment = child
   }
 
   protected Object createNode(Object name) {
@@ -124,6 +128,15 @@ class EDIBuilder extends BuilderSupport {
 
   protected Object createNode(Object name, Map attributes, Object value) {
     throw new EDIBuilderException("Unsupported operation");
+  }
+
+  def data(Closure closure) {
+    if (currentSegment instanceof EDISegment) {
+      EDISegment ediSegment = (EDISegment) currentSegment
+      ediSegment.data(closure)
+    } else {
+      throw new EDIBuilderException("data definition can be aplied only for EDI Segment");
+    }
   }
 
 }

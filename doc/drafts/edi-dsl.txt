@@ -1,26 +1,29 @@
 EDIBuilder edi = new EDIBuilder()
-edi.UNB {
-        UNG {
-            ds("UNOB": 1).ds("gcms003": "ZZ").ds(101013: 1129).de(1013115727000).de().de("CLSVAL")
-            UNH {
-
-            }
-    }
-}
-
-
-EDIBuilder edi = new EDIBuilder()
 edi.serviceStringAdvice(new UNASegment(
         .......
     )
 )
 edi.UNB {
         UNG {
-            ds("UNOB": 1).ds("gcms003": "ZZ").ds(101013: 1129).de(1013115727000).de().de("CLSVAL")
-            UNH {
-
+            data {
+              [UNOB, 1] + [gslg071, ZZ] + [gcms003, ZZ] + [101013, 1129] + 1013115727000 + "" + "CLSVAL"  
             }
-        }
-}
+            UNH {
+                data {
+                  "001" + "CLSVAL" + 1 + 972 + "MN"
+                }
 
+                BGM {
+                    data {
+                      [FCV, "", "", "GHACC0311701INTOT"] + "2010052717098TNGSLG71"
+                    }
+                }
+                DTM {
+                    data {
+                      [243, 20101013112914, 204]
+                    }
+                }
+            }
+    }
+}
 
