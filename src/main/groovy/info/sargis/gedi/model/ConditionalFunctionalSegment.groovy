@@ -1,7 +1,5 @@
 package info.sargis.gedi.model
 
-import static info.sargis.gedi.EDIConfig.EOL
-
 /**
  * Copyrights 2002-2010 Webb Fontaine
  * This software is the proprietary information of Webb Fontaine.
@@ -17,7 +15,7 @@ class ConditionalFunctionalSegment extends FunctionalSegment {
     StringBuilder sb = new StringBuilder()
 
     messageSegments.each { seg ->
-      sb << seg.toEDI() << EOL
+      sb << seg.toEDI()
     }
     return sb.toString()
   }

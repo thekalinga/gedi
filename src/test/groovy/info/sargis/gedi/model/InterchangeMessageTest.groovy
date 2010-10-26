@@ -4,7 +4,6 @@ import info.sargis.gedi.model.unb.UNBSegment
 import info.sargis.gedi.model.ung.UNGSegment
 import info.sargis.gedi.model.unh.UNHSegment
 import org.testng.Assert
-import org.testng.annotations.BeforeTest
 import org.testng.annotations.Test
 
 /**
@@ -16,19 +15,12 @@ import org.testng.annotations.Test
  */
 class InterchangeMessageTest {
 
-  private InterchangeMessage interchangeMessage
+  @Test
+  public void testToEDIWithFunctionalGroups() throws Exception {
 
-  @BeforeTest
-  public void setUp() {
-    interchangeMessage = new InterchangeMessage()
+    InterchangeMessage interchangeMessage = new InterchangeMessage()
     interchangeMessage.unbSegment = new UNBSegment()
 
-    interchangeMessage.addFunctionalSegment(createFirstFunctionalMessage())
-    interchangeMessage.addFunctionalSegment(createSecondFunctionalMessage())
-  }
-
-  @Test
-  public void testToEDI() throws Exception {
     def expectedEDI = '''\
       UNB
       UNG
@@ -46,6 +38,39 @@ class InterchangeMessageTest {
       UNE+1+UNG0111DUMMY
       UNZ+2+UNB0111DUMMY
       '''
+
+    interchangeMessage.addFunctionalSegment(createFirstFunctionalMessage())
+    interchangeMessage.addFunctionalSegment(createSecondFunctionalMessage())
+
+    Assert.assertEquals(interchangeMessage.toEDI(), expectedEDI.stripIndent());
+  }
+
+  @Test(enabled = false)
+  public void testToEDIWithoutFunctionalGroups() throws Exception {
+
+    InterchangeMessage interchangeMessage = new InterchangeMessage()
+    interchangeMessage.unbSegment = new UNBSegment()
+
+    def expectedEDI = '''\
+      UNB
+      UNH
+      C01
+      C22
+      C55
+      UNT+3+UNH0111DUMMY
+      UNH
+      X01
+      X22
+      UNT+2+UNH0111DUMMY
+      UNZ+2+UNB0111DUMMY
+      '''
+
+    FunctionalSegment functionalSegment = new ConditionalFunctionalSegment()
+    functionalSegment.addMessageSegment(createFirstMessageSegment())
+    functionalSegment.addMessageSegment(createSecondMessageSegment())
+
+    interchangeMessage.addFunctionalSegment(functionalSegment)
+
     Assert.assertEquals(interchangeMessage.toEDI(), expectedEDI.stripIndent());
   }
 

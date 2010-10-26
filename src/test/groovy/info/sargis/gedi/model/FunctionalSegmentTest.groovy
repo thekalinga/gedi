@@ -3,7 +3,6 @@ package info.sargis.gedi.model
 import info.sargis.gedi.model.ung.UNGSegment
 import info.sargis.gedi.model.unh.UNHSegment
 import org.testng.Assert
-import org.testng.annotations.BeforeTest
 import org.testng.annotations.Test
 
 /**
@@ -15,19 +14,15 @@ import org.testng.annotations.Test
  */
 class FunctionalSegmentTest {
 
-  private FunctionalSegment functionalSegment
+  @Test
+  public void testToEDI() throws Exception {
 
-  @BeforeTest
-  public void setUp() {
-    functionalSegment = new FunctionalSegment()
+    FunctionalSegment functionalSegment = new FunctionalSegment()
     functionalSegment.ungSegment = new UNGSegment()
 
     functionalSegment.addMessageSegment(createFirstMessageSegment())
     functionalSegment.addMessageSegment(createSecondMessageSegment())
-  }
 
-  @Test
-  public void testToEDI() throws Exception {
     def expectedEDI = '''\
       UNG
       UNH
