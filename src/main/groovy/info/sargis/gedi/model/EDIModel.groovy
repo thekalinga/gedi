@@ -10,37 +10,23 @@ import org.slf4j.LoggerFactory
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class EDIModel {
+class EDIModel implements Segment {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIModel.class);
 
   UNASegment unaSegment
   InterchangeMessage interchangeMessage
-  Writer writer
 
   def EDIModel() {
   }
 
-  def EDIModel(writer) {
-    this.writer = writer;
-  }
-
-  def buildEDI() {
+  String toEDI() {
+    assert unaSegment
     assert interchangeMessage
 
-    writeSegment(unaSegment)
-    writeSegment(interchangeMessage)
-  }
-
-
-  private def writeSegments(List<Segment> segments) {
-    segments.each { seg ->
-      writeSegment(seg)
-    }
-  }
-
-  private def writeSegment(Segment segment) {
-    writer.write(segment.toEDI())
+    StringBuilder stringBuilder = new StringBuilder()
+    stringBuilder << unaSegment.toEDI() << interchangeMessage.toEDI()
+    return stringBuilder.toString()
   }
 
 }

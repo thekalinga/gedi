@@ -46,15 +46,13 @@ class InterchangeMessage implements Segment {
   }
 
   private int getMessageCount() {
+    assert functionalSegments
 
-    if (functionalSegments) {
-      if (functionalSegments[0] instanceof ConditionalFunctionalSegment) {
-        return functionalSegments[0].getMessageSegments().size()
-      }
-      return functionalSegments.size()
+    if (functionalSegments[0] instanceof ConditionalFunctionalSegment) {
+      return functionalSegments[0].getMessageSegments().size()
     }
+    return functionalSegments.size()
 
-    return 0
   }
 
 }

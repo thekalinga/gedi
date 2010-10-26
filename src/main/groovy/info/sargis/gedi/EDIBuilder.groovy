@@ -21,9 +21,11 @@ class EDIBuilder extends BuilderSupport {
   private static final UNASegment DEFAULT_UNA = new UNASegment();
 
   private EDIModel ediModel
+  private Writer writer
 
   def EDIBuilder(Writer writer) {
-    ediModel = new EDIModel(writer)
+    this.writer = writer
+    ediModel = new EDIModel()
     ediModel.unaSegment = DEFAULT_UNA;
   }
 
@@ -31,19 +33,19 @@ class EDIBuilder extends BuilderSupport {
     ediModel.unaSegment = unaSegment
   }
 
+  def build() {
+    writer.write(ediModel.toEDI())
+    writer.flush()
+  }
+
   // ******************************** Builder support // ******************************** //
 
   protected void setParent(Object parent, Object child) {
+    LOGGER.debug("Parameters in setParent(): {}, {}", parent.class.name, child.class.name)
+    println("======================= " + child.class.name)
     switch (child) {
       case InterchangeMessage:
-
-        if (parent instanceof EDIModel) {
-          ediModel.interchangeMessage = child
-        } else {
-          throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
-        }
-        break
-
+        throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
       case FunctionalSegment:
 
         if (parent instanceof InterchangeMessage) {
@@ -93,6 +95,7 @@ class EDIBuilder extends BuilderSupport {
         interchangeMessage.with {
           unbSegment = new UNBSegment()
         }
+        ediModel.interchangeMessage = interchangeMessage
         return interchangeMessage
       case "UNG":
         FunctionalSegment functionalSegment = new FunctionalSegment()
