@@ -26,7 +26,7 @@ class InterchangeMessage implements Segment {
 
   UNZSegment getUnzSegment() {
     new UNZSegment(
-            msgCount: functionalSegments.size(), ctrlRef: unbSegment.msgRefNbr
+            msgCount: getMessageCount(), ctrlRef: unbSegment.msgRefNbr
     )
   }
 
@@ -43,6 +43,18 @@ class InterchangeMessage implements Segment {
     sb << getUnzSegment().toEDI()
 
     return sb.toString()
+  }
+
+  private int getMessageCount() {
+
+    if (functionalSegments) {
+      if (functionalSegments[0] instanceof ConditionalFunctionalSegment) {
+        return functionalSegments[0].getMessageSegments().size()
+      }
+      return functionalSegments.size()
+    }
+
+    return 0
   }
 
 }

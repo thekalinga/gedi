@@ -45,7 +45,7 @@ class InterchangeMessageTest {
     Assert.assertEquals(interchangeMessage.toEDI(), expectedEDI.stripIndent());
   }
 
-  @Test(enabled = false)
+  @Test
   public void testToEDIWithoutFunctionalGroups() throws Exception {
 
     InterchangeMessage interchangeMessage = new InterchangeMessage()
@@ -83,7 +83,7 @@ class InterchangeMessageTest {
     return functionalSegment
   }
 
-  FunctionalSegment createSecondFunctionalMessage() {
+  private FunctionalSegment createSecondFunctionalMessage() {
     FunctionalSegment functionalSegment = new FunctionalSegment()
     functionalSegment.ungSegment = new UNGSegment()
 
