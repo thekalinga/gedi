@@ -9,6 +9,6 @@ package info.sargis.gedi
  */
 class EDIConfig {
 
-  private static final String EOL = System.getProperty("line.separator");
+  public static final String EOL = System.getProperty("line.separator");
 
 }

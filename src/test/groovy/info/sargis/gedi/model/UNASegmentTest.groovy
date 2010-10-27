@@ -20,7 +20,10 @@ class UNASegmentTest {
 
   @Test
   public void testCustomUNASegment() throws Exception {
-    UNASegment una = new UNASegment(cdes: "|", des: "-", decn: ",", ri: "!", rs: " ", st: "^")
+    UNASegment una = new UNASegment(
+            compDataSep: "|", dataElemSeparator: "-", decimalNotation: ",",
+            releaseIndicator: "!", reserved: " ", segmentTerminator: "^"
+    )
     Assert.assertEquals(una.toEDI(), "UNA|-,! ^${EOL}");
   }
 

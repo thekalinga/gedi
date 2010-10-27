@@ -11,19 +11,22 @@ import static info.sargis.gedi.EDIConfig.EOL
  */
 class UNASegment extends EDISegment {
 
-  String cdes = ":"
-  String des = "+"
-  String decn = "."
-  String ri = "?"
-  String rs = " "
-  String st = "'"
+  String compDataSep = ":"
+  String dataElemSeparator = "+"
+  String decimalNotation = "."
+  String releaseIndicator = "?"
+  String reserved = " "
+  String segmentTerminator = "'"
 
   def UNASegment() {
     tagName = "UNA"
   }
 
   String toEDI() {
-    return "${tagName}${cdes}${des}${decn}${ri}${rs}${st}${EOL}";
+    StringBuilder sb = new StringBuilder(tagName)
+    sb << compDataSep << dataElemSeparator << decimalNotation << releaseIndicator << reserved << segmentTerminator << EOL
+
+    return sb.toString()
   }
 
 }

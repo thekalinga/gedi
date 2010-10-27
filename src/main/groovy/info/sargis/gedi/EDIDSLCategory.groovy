@@ -1,5 +1,9 @@
 package info.sargis.gedi
 
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.text.NumberFormat
+
 /**
  * Copyrights 2002-2010 Webb Fontaine
  * This software is the proprietary information of Webb Fontaine.
@@ -39,10 +43,14 @@ class EDIDSLCategory {
     "$self+$listEdi"
   }
 
+  static String toString(Number self) {
+    return formatNumber(self, '.' as char)
+  }
 
   static String plus(String self, String str) {
     "$self+$str"
   }
+
 
   static String plus(String self, Number number) {
     "$self+$number"
@@ -55,6 +63,21 @@ class EDIDSLCategory {
 
   static String toEDICompositeElement(List list) {
     list.join(":")
+  }
+
+  static String formatNumber(Number self, char decSeparator) {
+    NumberFormat nf = NumberFormat.getInstance()
+    if (nf instanceof DecimalFormat) {
+      nf.maximumFractionDigits = 20
+      nf.groupingUsed = false
+
+      DecimalFormatSymbols newSymbols = nf.decimalFormatSymbols
+      newSymbols.decimalSeparator = decSeparator
+
+      nf.decimalFormatSymbols = newSymbols
+    }
+
+    return nf.format(self)
   }
 
 }
