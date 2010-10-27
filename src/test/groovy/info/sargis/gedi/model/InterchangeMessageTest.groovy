@@ -68,7 +68,7 @@ class InterchangeMessageTest {
 
     InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
 
-    FunctionalGroupPayload functionalSegment = new ConditionalFunctionalGroupPayload(interchangeMessage)
+    FunctionalGroupPayload functionalSegment = interchangeMessage.createConditionalFunctionalPayload()
     functionalSegment.addMessageSegment(createFirstMessageSegment())
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
@@ -78,14 +78,14 @@ class InterchangeMessageTest {
   }
 
   private FunctionalGroupPayload createFirstFunctionalMessage() {
-    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalGroupPayload()
+    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalPayload()
     functionalSegment.addMessageSegment(createFirstMessageSegment())
 
     return functionalSegment
   }
 
   private FunctionalGroupPayload createSecondFunctionalMessage() {
-    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalGroupPayload()
+    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalPayload()
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
     return functionalSegment

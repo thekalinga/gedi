@@ -10,45 +10,25 @@ package info.sargis.gedi.model
 public interface InterchangeMessage {
   String getEol()
 
-  ;
-
   String getCompDataSeparator()
-
-  ;
 
   String getDataElemSeparator()
 
-  ;
-
   String getDecimalNotation()
-
-  ;
 
   String getReleaseIndicator()
 
-  ;
-
   String getReserved()
-
-  ;
 
   String getSegmentTerminator()
 
-  ;
-
   InterchangePayload createInterchangePayload()
 
-  ;
+  FunctionalGroupPayload createFunctionalPayload()
 
-  FunctionalGroupPayload createFunctionalGroupPayload()
-
-  ;
+  ConditionalFunctionalGroupPayload createConditionalFunctionalPayload()
 
   MessagePayload createMessagePayload()
 
-  ;
-
   UserSegment createUserSegment(String tagName)
-
-  ;
 }

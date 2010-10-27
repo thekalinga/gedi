@@ -64,8 +64,7 @@ class EDIBuilder extends BuilderSupport {
 
           def segments = iMessage.getFunctionalSegments()
           if (segments) {
-            FunctionalGroupPayload functionalSegment = new ConditionalFunctionalGroupPayload()
-            parent.addFunctionalSegment(functionalSegment)
+            parent.addFunctionalSegment(ediMessage.createConditionalFunctionalPayload())
           }
           segments[0].addMessageSegment(child)
         } else if (parent instanceof FunctionalGroupPayload) {
@@ -96,7 +95,7 @@ class EDIBuilder extends BuilderSupport {
       case "UNB":
         return ediMessage.createInterchangePayload()
       case "UNG":
-        return ediMessage.createFunctionalGroupPayload()
+        return ediMessage.createFunctionalPayload()
       case "UNH":
         return ediMessage.createMessagePayload()
       default:

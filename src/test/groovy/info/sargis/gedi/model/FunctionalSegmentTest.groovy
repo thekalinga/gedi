@@ -24,7 +24,7 @@ class FunctionalSegmentTest {
   @Test
   public void testToEDI() throws Exception {
 
-    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalGroupPayload()
+    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalPayload()
 
     functionalSegment.addMessageSegment(createFirstMessageSegment())
     functionalSegment.addMessageSegment(createSecondMessageSegment())
