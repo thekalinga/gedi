@@ -1,5 +1,6 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.model.una.UNASegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -14,19 +15,34 @@ class EDIInterchangeMessage implements Segment {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIInterchangeMessage.class);
 
-  UNASegment unaSegment
-  InterchangePayload interchangeMessage
+  private static final String EOL = System.getProperty("line.separator");
+
+  private UNASegment unaSegment
+  InterchangePayload interchangePayload
 
   def EDIInterchangeMessage() {
   }
 
+  void setUnaSegment(UNASegment unaSegment) {
+    unaSegment.interchangeMessage = this
+    this.unaSegment = unaSegment
+  }
+
+  UNASegment setUnaSegment(UNASegment una) {
+    return unaSegment;
+  }
+
   String toEDI() {
     assert unaSegment
-    assert interchangeMessage
+    assert interchangePayload
 
     StringBuilder stringBuilder = new StringBuilder()
-    stringBuilder << unaSegment.toEDI() << interchangeMessage.toEDI()
+    stringBuilder << unaSegment.toEDI() << interchangePayload.toEDI()
     return stringBuilder.toString()
+  }
+
+  String getEol() {
+    return EOL
   }
 
 }

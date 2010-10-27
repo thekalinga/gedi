@@ -14,9 +14,17 @@ class FunctionalGroupPayload implements Segment {
 
   private List<MessagePayload> messageSegments = []
 
-  UNGSegment ungSegment;
+  EDIInterchangeMessage ediMessage
+
+  def FunctionalGroupPayload() {
+  }
+
+  def FunctionalGroupPayload(EDIInterchangeMessage ediMessage) {
+    this.ediMessage = ediMessage
+  }
 
   def addMessageSegment(MessagePayload messageSegment) {
+    messageSegment.ediMessage = ediMessage
     messageSegments << messageSegment
   }
 
@@ -24,25 +32,33 @@ class FunctionalGroupPayload implements Segment {
     return Collections.unmodifiableList(messageSegments)
   }
 
-  UNESegment getUneSegment() {
-    new UNESegment(
-            msgCount: messageSegments.size(), grpRefNbr: ungSegment.msgRefNbr
-    )
-  }
-
   String toEDI() {
-    assert ungSegment
+    assert ediMessage
     assert messageSegments
 
     StringBuilder sb = new StringBuilder()
 
+    UNGSegment ungSegment = getUngSegment()
     sb << ungSegment.toEDI()
     messageSegments.each { seg ->
       sb << seg.toEDI()
     }
-    sb << getUneSegment().toEDI()
+    sb << getUneSegment(ungSegment).toEDI()
 
     return sb.toString()
+  }
+
+  private UNGSegment getUngSegment() {
+    return new UNGSegment(ediMessage)
+  }
+
+  private UNESegment getUneSegment(UNGSegment ungSegment) {
+    UNESegment uneSegment = new UNESegment(
+            msgCount: messageSegments.size(), grpRefNbr: ungSegment.msgRefNbr
+    )
+    uneSegment.interchangeMessage = ediMessage
+
+    return uneSegment
   }
 
 }

@@ -1,8 +1,8 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.model.una.UNASegment
 import org.testng.Assert
 import org.testng.annotations.Test
-import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -15,7 +15,10 @@ class UNASegmentTest {
 
   @Test
   public void testDefaultUNASegment() throws Exception {
-    Assert.assertEquals(new UNASegment().toEDI(), "UNA:+.? '${EOL}");
+    UNASegment una = new UNASegment()
+    una.interchangeMessage = new EDIInterchangeMessage()
+
+    Assert.assertEquals(una.toEDI(), "UNA:+.? '${una.interchangeMessage.eol}");
   }
 
   @Test
@@ -24,7 +27,9 @@ class UNASegmentTest {
             compDataSep: "|", dataElemSeparator: "-", decimalNotation: ",",
             releaseIndicator: "!", reserved: " ", segmentTerminator: "^"
     )
-    Assert.assertEquals(una.toEDI(), "UNA|-,! ^${EOL}");
+    una.interchangeMessage = new EDIInterchangeMessage()
+
+    Assert.assertEquals(una.toEDI(), "UNA|-,! ^${una.interchangeMessage.eol}");
   }
 
 }

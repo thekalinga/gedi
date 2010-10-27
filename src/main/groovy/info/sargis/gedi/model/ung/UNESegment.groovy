@@ -1,7 +1,7 @@
 package info.sargis.gedi.model.ung
 
 import info.sargis.gedi.model.AbstractSegment
-import static info.sargis.gedi.EDIConfig.EOL
+import info.sargis.gedi.model.EDIInterchangeMessage
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -15,11 +15,16 @@ class UNESegment extends AbstractSegment {
   Integer msgCount
   String grpRefNbr
 
+  String tagName = "UNE"
+
   def UNESegment() {
-    tagName = "UNE"
+  }
+
+  def UNESegment(EDIInterchangeMessage interchangeMessage) {
+    super(interchangeMessage);
   }
 
   String toEDI() {
-    return "${tagName}+${msgCount}+${grpRefNbr}${EOL}"
+    return "${tagName}+${msgCount}+${grpRefNbr}${interchangeMessage.eol}"
   }
 }

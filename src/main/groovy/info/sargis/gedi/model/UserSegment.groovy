@@ -8,4 +8,11 @@ package info.sargis.gedi.model
  * Date: Oct 25, 2010
  */
 class UserSegment extends AbstractSegment {
+
+  def UserSegment() {
+  }
+
+  def UserSegment(EDIInterchangeMessage interchangeMessage) {
+    super(interchangeMessage);
+  }
 }

@@ -1,7 +1,5 @@
 package info.sargis.gedi.model
 
-import info.sargis.gedi.model.ung.UNGSegment
-import info.sargis.gedi.model.unh.UNHSegment
 import org.testng.Assert
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -15,13 +13,14 @@ import org.testng.annotations.Test
  */
 class FunctionalSegmentTest {
 
+  EDIInterchangeMessage interchangeMessage
   FunctionalGroupPayload functionalSegment
+
 
   @BeforeMethod
   public void setUp() {
-    functionalSegment = new FunctionalGroupPayload()
-    functionalSegment.ungSegment = new UNGSegment()
-
+    interchangeMessage = new EDIInterchangeMessage()
+    functionalSegment = new FunctionalGroupPayload(interchangeMessage)
   }
 
   @Test
@@ -47,8 +46,7 @@ class FunctionalSegmentTest {
   }
 
   private MessagePayload createFirstMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload()
-    messageSegment.unhSegment = new UNHSegment()
+    MessagePayload messageSegment = new MessagePayload(interchangeMessage)
 
     messageSegment.addUserSegment(new UserSegment(tagName: "C01"))
     messageSegment.addUserSegment(new UserSegment(tagName: "C22"))
@@ -57,8 +55,7 @@ class FunctionalSegmentTest {
   }
 
   private MessagePayload createSecondMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload()
-    messageSegment.unhSegment = new UNHSegment()
+    MessagePayload messageSegment = new MessagePayload(interchangeMessage)
 
     messageSegment.addUserSegment(new UserSegment(tagName: "X01"))
     messageSegment.addUserSegment(new UserSegment(tagName: "X22"))

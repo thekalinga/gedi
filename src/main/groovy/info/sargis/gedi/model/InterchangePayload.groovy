@@ -14,9 +14,17 @@ class InterchangePayload implements Segment {
 
   private List<FunctionalGroupPayload> functionalSegments = []
 
-  UNBSegment unbSegment
+  EDIInterchangeMessage ediMessage
+
+  def InterchangePayload() {
+  }
+
+  def InterchangePayload(EDIInterchangeMessage ediMessage) {
+    this.ediMessage = ediMessage
+  }
 
   def addFunctionalSegment(FunctionalGroupPayload functionalSegment) {
+    functionalSegment.ediMessage = ediMessage
     functionalSegments << functionalSegment
   }
 
@@ -24,25 +32,33 @@ class InterchangePayload implements Segment {
     return Collections.unmodifiableList(functionalSegments)
   }
 
-  UNZSegment getUnzSegment() {
-    new UNZSegment(
-            msgCount: getMessageCount(), ctrlRef: unbSegment.msgRefNbr
-    )
-  }
-
   String toEDI() {
-    assert unbSegment
+    assert ediMessage
     assert functionalSegments
 
     StringBuilder sb = new StringBuilder()
 
+    UNBSegment unbSegment = getUNBSegment()
     sb << unbSegment.toEDI()
     functionalSegments.each { seg ->
       sb << seg.toEDI()
     }
-    sb << getUnzSegment().toEDI()
+    sb << getUnzSegment(unbSegment).toEDI()
 
     return sb.toString()
+  }
+
+  private UNBSegment getUNBSegment() {
+    return new UNBSegment(ediMessage)
+  }
+
+  private UNZSegment getUnzSegment(UNBSegment unbSegment) {
+    UNZSegment unzSegment = new UNZSegment(
+            msgCount: getMessageCount(), ctrlRef: unbSegment.msgRefNbr
+    )
+    unzSegment.interchangeMessage = ediMessage
+
+    return unzSegment
   }
 
   private int getMessageCount() {

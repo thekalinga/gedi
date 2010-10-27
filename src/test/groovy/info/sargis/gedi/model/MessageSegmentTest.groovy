@@ -1,6 +1,5 @@
 package info.sargis.gedi.model
 
-import info.sargis.gedi.model.unh.UNHSegment
 import org.testng.Assert
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -18,8 +17,7 @@ class MessageSegmentTest {
 
   @BeforeMethod
   public void setUp() {
-    messageSegment = new MessagePayload()
-    messageSegment.unhSegment = new UNHSegment()
+    messageSegment = new MessagePayload(new EDIInterchangeMessage())
   }
 
   @Test

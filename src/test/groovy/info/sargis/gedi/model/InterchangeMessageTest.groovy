@@ -1,8 +1,5 @@
 package info.sargis.gedi.model
 
-import info.sargis.gedi.model.unb.UNBSegment
-import info.sargis.gedi.model.ung.UNGSegment
-import info.sargis.gedi.model.unh.UNHSegment
 import org.testng.Assert
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -16,12 +13,13 @@ import org.testng.annotations.Test
  */
 class InterchangeMessageTest {
 
+  EDIInterchangeMessage ediMessage
   InterchangePayload interchangeMessage
 
   @BeforeMethod
   public void setUp() {
-    interchangeMessage = new InterchangePayload()
-    interchangeMessage.unbSegment = new UNBSegment()
+    ediMessage = new EDIInterchangeMessage()
+    interchangeMessage = new InterchangePayload(ediMessage)
   }
 
   @Test
@@ -68,7 +66,7 @@ class InterchangeMessageTest {
       UNZ+2+UNB0111DUMMY
       '''
 
-    FunctionalGroupPayload functionalSegment = new ConditionalFunctionalGroupPayload()
+    FunctionalGroupPayload functionalSegment = new ConditionalFunctionalGroupPayload(ediMessage)
     functionalSegment.addMessageSegment(createFirstMessageSegment())
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
@@ -78,26 +76,21 @@ class InterchangeMessageTest {
   }
 
   private FunctionalGroupPayload createFirstFunctionalMessage() {
-    FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload()
-    functionalSegment.ungSegment = new UNGSegment()
-
+    FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload(ediMessage)
     functionalSegment.addMessageSegment(createFirstMessageSegment())
 
     return functionalSegment
   }
 
   private FunctionalGroupPayload createSecondFunctionalMessage() {
-    FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload()
-    functionalSegment.ungSegment = new UNGSegment()
-
+    FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload(ediMessage)
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
     return functionalSegment
   }
 
   private MessagePayload createFirstMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload()
-    messageSegment.unhSegment = new UNHSegment()
+    MessagePayload messageSegment = new MessagePayload(ediMessage)
 
     messageSegment.addUserSegment(new UserSegment(tagName: "C01"))
     messageSegment.addUserSegment(new UserSegment(tagName: "C22"))
@@ -106,8 +99,7 @@ class InterchangeMessageTest {
   }
 
   private MessagePayload createSecondMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload()
-    messageSegment.unhSegment = new UNHSegment()
+    MessagePayload messageSegment = new MessagePayload(ediMessage)
 
     messageSegment.addUserSegment(new UserSegment(tagName: "X01"))
     messageSegment.addUserSegment(new UserSegment(tagName: "X22"))

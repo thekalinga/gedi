@@ -1,7 +1,6 @@
 package info.sargis.gedi.model
 
 import info.sargis.gedi.EDIDSLCategory
-import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -15,6 +14,15 @@ abstract class AbstractSegment implements Segment {
   String tagName = ""
   String ediString = ""
 
+  EDIInterchangeMessage interchangeMessage
+
+  def AbstractSegment() {
+  }
+
+  def AbstractSegment(EDIInterchangeMessage interchangeMessage) {
+    this.interchangeMessage = interchangeMessage;
+  }
+
   def data(Closure closure) {
     use(EDIDSLCategory) {
       ediString = closure.call()
@@ -22,7 +30,15 @@ abstract class AbstractSegment implements Segment {
   }
 
   String toEDI() {
-    return "$tagName+$ediString'${EOL}";
+    assert interchangeMessage
+    return "$tagName+$ediString'${interchangeMessage.eol}";
   }
 
+
+  public String toString() {
+    return "AbstractSegment{" +
+            "tagName='" + tagName + '\'' +
+            ", ediString='" + ediString + '\'' +
+            '}';
+  }
 }

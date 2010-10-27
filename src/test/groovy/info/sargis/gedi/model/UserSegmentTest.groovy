@@ -2,7 +2,6 @@ package info.sargis.gedi.model
 
 import org.testng.Assert
 import org.testng.annotations.Test
-import static info.sargis.gedi.EDIConfig.EOL
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -15,10 +14,13 @@ class UserSegmentTest {
   @Test
   public void testToEDI() throws Exception {
     def tag = "GCC"
+
     UserSegment segment = new UserSegment(tagName: tag)
+    segment.interchangeMessage = new EDIInterchangeMessage()
     segment.data {
       ["GCC", "", "XXX"] + 1222 + "ZSSS01"
     }
-    Assert.assertEquals(segment.toEDI(), "${tag}+GCC::XXX+1222+ZSSS01'${EOL}");
+
+    Assert.assertEquals(segment.toEDI(), "${tag}+GCC::XXX+1222+ZSSS01'${segment.interchangeMessage.eol}");
   }
 }

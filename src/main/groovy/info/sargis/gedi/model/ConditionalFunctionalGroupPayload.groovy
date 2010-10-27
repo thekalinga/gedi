@@ -9,6 +9,13 @@ package info.sargis.gedi.model
  */
 class ConditionalFunctionalGroupPayload extends FunctionalGroupPayload {
 
+  def ConditionalFunctionalGroupPayload() {
+  }
+
+  def ConditionalFunctionalGroupPayload(EDIInterchangeMessage ediMessage) {
+    super(ediMessage);
+  }
+
   def String toEDI() {
     assert messageSegments
 

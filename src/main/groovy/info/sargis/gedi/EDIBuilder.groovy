@@ -1,8 +1,6 @@
 package info.sargis.gedi
 
-import info.sargis.gedi.model.unb.UNBSegment
-import info.sargis.gedi.model.ung.UNGSegment
-import info.sargis.gedi.model.unh.UNHSegment
+import info.sargis.gedi.model.una.UNASegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import info.sargis.gedi.model.*
@@ -20,23 +18,24 @@ class EDIBuilder extends BuilderSupport {
 
   private static final UNASegment DEFAULT_UNA = new UNASegment();
 
-  private EDIInterchangeMessage ediModel
+  private EDIInterchangeMessage ediMessage
   private Writer writer
 
   private Segment currentSegment
 
   def EDIBuilder(Writer writer) {
     this.writer = writer
-    ediModel = new EDIInterchangeMessage()
-    ediModel.unaSegment = DEFAULT_UNA;
+
+    ediMessage = new EDIInterchangeMessage()
+    ediMessage.unaSegment = DEFAULT_UNA;
   }
 
   public void serviceStringAdvice(UNASegment unaSegment) {
-    ediModel.unaSegment = unaSegment
+    ediMessage.unaSegment = unaSegment
   }
 
   def build() {
-    writer.write(ediModel.toEDI())
+    writer.write(ediMessage.toEDI())
     writer.flush()
   }
 
@@ -95,26 +94,19 @@ class EDIBuilder extends BuilderSupport {
   protected Object createNode(Object name) {
     switch (name) {
       case "UNB":
-        InterchangePayload interchangeMessage = new InterchangePayload()
-        interchangeMessage.with {
-          unbSegment = new UNBSegment()
-        }
-        ediModel.interchangeMessage = interchangeMessage
-        return interchangeMessage
+        InterchangePayload iPayload = new InterchangePayload(ediMessage)
+        ediMessage.interchangePayload = iPayload;
+        return iPayload
       case "UNG":
-        FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload()
-        functionalSegment.with {
-          ungSegment = new UNGSegment()
-        }
-        return functionalSegment
+        return new FunctionalGroupPayload(ediMessage)
       case "UNH":
-        MessagePayload messageSegment = new MessagePayload()
-        messageSegment.with {
-          unhSegment = new UNHSegment()
-        }
-        return messageSegment
+        return new MessagePayload(ediMessage)
       default:
-        return new UserSegment(tagName: name)
+        UserSegment userSegment = new UserSegment(tagName: name)
+        userSegment.with {
+          interchangeMessage = ediMessage
+        }
+        return userSegment
     }
   }
 

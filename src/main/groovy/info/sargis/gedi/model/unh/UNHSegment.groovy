@@ -1,7 +1,7 @@
 package info.sargis.gedi.model.unh
 
 import info.sargis.gedi.model.AbstractSegment
-import static info.sargis.gedi.EDIConfig.EOL
+import info.sargis.gedi.model.EDIInterchangeMessage
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -14,11 +14,17 @@ class UNHSegment extends AbstractSegment {
 
   String msgRefNbr = "UNH0111DUMMY"
 
+  String tagName = "UNH"
+
   def UNHSegment() {
-    tagName = "UNH"
+  }
+
+  def UNHSegment(EDIInterchangeMessage interchangeMessage) {
+    super(interchangeMessage);
   }
 
   String toEDI() {
-    return "${tagName}${EOL}";
+    assert interchangeMessage
+    return "${tagName}${interchangeMessage.eol}";
   }
 }

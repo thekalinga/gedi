@@ -14,9 +14,17 @@ class MessagePayload implements Segment {
 
   private List<Segment> userSegments = []
 
-  UNHSegment unhSegment
+  EDIInterchangeMessage ediMessage
 
-  def addUserSegment(Segment segment) {
+  def MessagePayload() {
+  }
+
+  def MessagePayload(EDIInterchangeMessage ediMessage) {
+    this.ediMessage = ediMessage;
+  }
+
+  def addUserSegment(UserSegment segment) {
+    segment.interchangeMessage = ediMessage
     userSegments << segment
   }
 
@@ -24,24 +32,32 @@ class MessagePayload implements Segment {
     return Collections.unmodifiableList(userSegments)
   }
 
-  UNTSegment getUntSegment() {
-    new UNTSegment(
-            msgCount: userSegments.size(), msgRefNbr: unhSegment.msgRefNbr
-    )
-  }
-
   String toEDI() {
     assert unhSegment
 
     StringBuilder sb = new StringBuilder()
 
+    UNHSegment unhSegment = getUnhSegment()
     sb << unhSegment.toEDI()
     userSegments.each { seg ->
       sb << seg.toEDI()
     }
-    sb << getUntSegment().toEDI()
+    sb << getUntSegment(unhSegment).toEDI()
 
     return sb.toString()
+  }
+
+  UNHSegment getUnhSegment() {
+    return new UNHSegment(ediMessage)
+  }
+
+  UNTSegment getUntSegment(UNHSegment unhSegment) {
+    UNTSegment untSegment = new UNTSegment(
+            msgCount: userSegments.size(), msgRefNbr: unhSegment.msgRefNbr
+    )
+    untSegment.interchangeMessage = ediMessage
+
+    return untSegment
   }
 
 }

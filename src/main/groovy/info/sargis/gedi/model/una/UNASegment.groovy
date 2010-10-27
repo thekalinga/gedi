@@ -1,6 +1,7 @@
-package info.sargis.gedi.model
+package info.sargis.gedi.model.una
 
-import static info.sargis.gedi.EDIConfig.EOL
+import info.sargis.gedi.model.AbstractSegment
+import info.sargis.gedi.model.EDIInterchangeMessage
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -18,13 +19,20 @@ class UNASegment extends AbstractSegment {
   String reserved = " "
   String segmentTerminator = "'"
 
+  String tagName = "UNA"
+
   def UNASegment() {
-    tagName = "UNA"
+  }
+
+  def UNASegment(EDIInterchangeMessage interchangeMessage) {
+    super(interchangeMessage)
   }
 
   String toEDI() {
     StringBuilder sb = new StringBuilder(tagName)
-    sb << compDataSep << dataElemSeparator << decimalNotation << releaseIndicator << reserved << segmentTerminator << EOL
+
+    sb << compDataSep << dataElemSeparator << decimalNotation << releaseIndicator
+    sb << reserved << segmentTerminator << interchangeMessage.eol
 
     return sb.toString()
   }
