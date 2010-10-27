@@ -1,6 +1,7 @@
 package info.sargis.gedi.model
 
 import org.testng.Assert
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 /**
@@ -11,12 +12,19 @@ import org.testng.annotations.Test
  * Date: Oct 26, 2010
  */
 class UserSegmentTest {
+
+  EDIInterchangeMessage interchangeMessage
+
+  @BeforeMethod
+  public void setUp() {
+    interchangeMessage = new EDIInterchangeMessage()
+  }
+
   @Test
   public void testToEDI() throws Exception {
     def tag = "GCC"
 
-    UserSegment segment = new UserSegment(tagName: tag)
-    segment.interchangeMessage = new EDIInterchangeMessage()
+    UserSegment segment = interchangeMessage.createUserSegment(tag)
     segment.data {
       ["GCC", "", "XXX"] + 1222 + "ZSSS01"
     }

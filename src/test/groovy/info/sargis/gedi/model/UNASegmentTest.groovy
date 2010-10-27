@@ -15,9 +15,7 @@ class UNASegmentTest {
 
   @Test
   public void testDefaultUNASegment() throws Exception {
-    UNASegment una = new UNASegment()
-    una.interchangeMessage = new EDIInterchangeMessage()
-
+    UNASegment una = new UNASegment(new EDIInterchangeMessage())
     Assert.assertEquals(una.toEDI(), "UNA:+.? '${una.interchangeMessage.eol}");
   }
 

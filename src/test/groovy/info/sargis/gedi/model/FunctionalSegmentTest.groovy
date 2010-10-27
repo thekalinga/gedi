@@ -14,17 +14,17 @@ import org.testng.annotations.Test
 class FunctionalSegmentTest {
 
   EDIInterchangeMessage interchangeMessage
-  FunctionalGroupPayload functionalSegment
 
 
   @BeforeMethod
   public void setUp() {
     interchangeMessage = new EDIInterchangeMessage()
-    functionalSegment = new FunctionalGroupPayload(interchangeMessage)
   }
 
   @Test
   public void testToEDI() throws Exception {
+
+    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalGroupPayload()
 
     functionalSegment.addMessageSegment(createFirstMessageSegment())
     functionalSegment.addMessageSegment(createSecondMessageSegment())
@@ -46,19 +46,19 @@ class FunctionalSegmentTest {
   }
 
   private MessagePayload createFirstMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload(interchangeMessage)
+    MessagePayload messageSegment = interchangeMessage.createMessagePayload()
 
-    messageSegment.addUserSegment(new UserSegment(tagName: "C01"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "C22"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "C55"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C01"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C22"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C55"))
     return messageSegment
   }
 
   private MessagePayload createSecondMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload(interchangeMessage)
+    MessagePayload messageSegment = interchangeMessage.createMessagePayload()
 
-    messageSegment.addUserSegment(new UserSegment(tagName: "X01"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "X22"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("X01"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("X22"))
     return messageSegment
   }
 

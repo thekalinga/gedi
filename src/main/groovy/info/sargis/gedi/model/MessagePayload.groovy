@@ -24,7 +24,6 @@ class MessagePayload implements Segment {
   }
 
   def addUserSegment(UserSegment segment) {
-    segment.interchangeMessage = ediMessage
     userSegments << segment
   }
 

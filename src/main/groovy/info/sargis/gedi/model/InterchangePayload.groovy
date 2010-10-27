@@ -24,7 +24,6 @@ class InterchangePayload implements Segment {
   }
 
   def addFunctionalSegment(FunctionalGroupPayload functionalSegment) {
-    functionalSegment.ediMessage = ediMessage
     functionalSegments << functionalSegment
   }
 

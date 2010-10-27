@@ -13,13 +13,11 @@ import org.testng.annotations.Test
  */
 class InterchangeMessageTest {
 
-  EDIInterchangeMessage ediMessage
-  InterchangePayload interchangeMessage
+  EDIInterchangeMessage interchangeMessage
 
   @BeforeMethod
   public void setUp() {
-    ediMessage = new EDIInterchangeMessage()
-    interchangeMessage = new InterchangePayload(ediMessage)
+    interchangeMessage = new EDIInterchangeMessage()
   }
 
   @Test
@@ -43,10 +41,12 @@ class InterchangeMessageTest {
       UNZ+2+UNB0111DUMMY
       '''
 
-    interchangeMessage.addFunctionalSegment(createFirstFunctionalMessage())
-    interchangeMessage.addFunctionalSegment(createSecondFunctionalMessage())
+    InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
 
-    Assert.assertEquals(interchangeMessage.toEDI(), expectedEDI.stripIndent());
+    interchangePayload.addFunctionalSegment(createFirstFunctionalMessage())
+    interchangePayload.addFunctionalSegment(createSecondFunctionalMessage())
+
+    Assert.assertEquals(interchangePayload.toEDI(), expectedEDI.stripIndent());
   }
 
   @Test
@@ -66,43 +66,45 @@ class InterchangeMessageTest {
       UNZ+2+UNB0111DUMMY
       '''
 
-    FunctionalGroupPayload functionalSegment = new ConditionalFunctionalGroupPayload(ediMessage)
+    InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
+
+    FunctionalGroupPayload functionalSegment = new ConditionalFunctionalGroupPayload(interchangeMessage)
     functionalSegment.addMessageSegment(createFirstMessageSegment())
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
-    interchangeMessage.addFunctionalSegment(functionalSegment)
+    interchangePayload.addFunctionalSegment(functionalSegment)
 
-    Assert.assertEquals(interchangeMessage.toEDI(), expectedEDI.stripIndent());
+    Assert.assertEquals(interchangePayload.toEDI(), expectedEDI.stripIndent());
   }
 
   private FunctionalGroupPayload createFirstFunctionalMessage() {
-    FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload(ediMessage)
+    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalGroupPayload()
     functionalSegment.addMessageSegment(createFirstMessageSegment())
 
     return functionalSegment
   }
 
   private FunctionalGroupPayload createSecondFunctionalMessage() {
-    FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload(ediMessage)
+    FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalGroupPayload()
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
     return functionalSegment
   }
 
   private MessagePayload createFirstMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload(ediMessage)
+    MessagePayload messageSegment = interchangeMessage.createMessagePayload()
 
-    messageSegment.addUserSegment(new UserSegment(tagName: "C01"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "C22"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "C55"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C01"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C22"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C55"))
     return messageSegment
   }
 
   private MessagePayload createSecondMessageSegment() {
-    MessagePayload messageSegment = new MessagePayload(ediMessage)
+    MessagePayload messageSegment = interchangeMessage.createMessagePayload()
 
-    messageSegment.addUserSegment(new UserSegment(tagName: "X01"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "X22"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("X01"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("X22"))
     return messageSegment
   }
 

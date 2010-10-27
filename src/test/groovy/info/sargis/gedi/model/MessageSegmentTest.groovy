@@ -13,19 +13,21 @@ import org.testng.annotations.Test
  */
 class MessageSegmentTest {
 
-  MessagePayload messageSegment
+  EDIInterchangeMessage interchangeMessage
 
   @BeforeMethod
   public void setUp() {
-    messageSegment = new MessagePayload(new EDIInterchangeMessage())
+    interchangeMessage = new EDIInterchangeMessage()
   }
 
   @Test
   public void testToEDI() throws Exception {
 
-    messageSegment.addUserSegment(new UserSegment(tagName: "C01"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "C22"))
-    messageSegment.addUserSegment(new UserSegment(tagName: "C55"))
+    MessagePayload messageSegment = new MessagePayload(new EDIInterchangeMessage())
+
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C01"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C22"))
+    messageSegment.addUserSegment(interchangeMessage.createUserSegment("C55"))
 
     def expectedEDI = '''\
       UNH
