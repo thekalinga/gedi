@@ -4,6 +4,7 @@ import info.sargis.gedi.model.unb.UNBSegment
 import info.sargis.gedi.model.ung.UNGSegment
 import info.sargis.gedi.model.unh.UNHSegment
 import org.testng.Assert
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 /**
@@ -15,11 +16,16 @@ import org.testng.annotations.Test
  */
 class InterchangeMessageTest {
 
+  InterchangeMessage interchangeMessage
+
+  @BeforeMethod
+  public void setUp() {
+    interchangeMessage = new InterchangeMessage()
+    interchangeMessage.unbSegment = new UNBSegment()
+  }
+
   @Test
   public void testToEDIWithFunctionalGroups() throws Exception {
-
-    InterchangeMessage interchangeMessage = new InterchangeMessage()
-    interchangeMessage.unbSegment = new UNBSegment()
 
     def expectedEDI = '''\
       UNB
@@ -47,9 +53,6 @@ class InterchangeMessageTest {
 
   @Test
   public void testToEDIWithoutFunctionalGroups() throws Exception {
-
-    InterchangeMessage interchangeMessage = new InterchangeMessage()
-    interchangeMessage.unbSegment = new UNBSegment()
 
     def expectedEDI = '''\
       UNB

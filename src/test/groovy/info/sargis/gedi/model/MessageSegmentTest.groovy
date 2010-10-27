@@ -2,6 +2,7 @@ package info.sargis.gedi.model
 
 import info.sargis.gedi.model.unh.UNHSegment
 import org.testng.Assert
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 /**
@@ -13,11 +14,16 @@ import org.testng.annotations.Test
  */
 class MessageSegmentTest {
 
+  MessageSegment messageSegment
+
+  @BeforeMethod
+  public void setUp() {
+    messageSegment = new MessageSegment()
+    messageSegment.unhSegment = new UNHSegment()
+  }
+
   @Test
   public void testToEDI() throws Exception {
-
-    MessageSegment messageSegment = new MessageSegment()
-    messageSegment.unhSegment = new UNHSegment()
 
     messageSegment.addUserSegment(new UserSegment(tagName: "C01"))
     messageSegment.addUserSegment(new UserSegment(tagName: "C22"))
