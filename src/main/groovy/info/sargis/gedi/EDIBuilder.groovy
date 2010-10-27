@@ -94,19 +94,13 @@ class EDIBuilder extends BuilderSupport {
   protected Object createNode(Object name) {
     switch (name) {
       case "UNB":
-        InterchangePayload iPayload = new InterchangePayload(ediMessage)
-        ediMessage.interchangePayload = iPayload;
-        return iPayload
+        return ediMessage.createInterchangePayload()
       case "UNG":
-        return new FunctionalGroupPayload(ediMessage)
+        return ediMessage.createFunctionalGroupPayload()
       case "UNH":
-        return new MessagePayload(ediMessage)
+        return ediMessage.createMessagePayload()
       default:
-        UserSegment userSegment = new UserSegment(tagName: name)
-        userSegment.with {
-          interchangeMessage = ediMessage
-        }
-        return userSegment
+        return ediMessage.createUserSegment(name)
     }
   }
 
