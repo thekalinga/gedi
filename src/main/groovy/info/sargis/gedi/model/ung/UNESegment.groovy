@@ -1,7 +1,7 @@
 package info.sargis.gedi.model.ung
 
 import info.sargis.gedi.model.AbstractSegment
-import info.sargis.gedi.model.EDIInterchangeMessage
+import info.sargis.gedi.model.InterchangeMessage
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -20,7 +20,7 @@ class UNESegment extends AbstractSegment {
   def UNESegment() {
   }
 
-  def UNESegment(EDIInterchangeMessage interchangeMessage) {
+  def UNESegment(InterchangeMessage interchangeMessage) {
     super(interchangeMessage);
   }
 

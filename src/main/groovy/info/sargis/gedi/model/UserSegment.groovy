@@ -12,7 +12,7 @@ class UserSegment extends AbstractSegment {
   def UserSegment() {
   }
 
-  def UserSegment(EDIInterchangeMessage interchangeMessage) {
+  def UserSegment(InterchangeMessage interchangeMessage) {
     super(interchangeMessage);
   }
 }

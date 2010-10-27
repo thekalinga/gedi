@@ -14,12 +14,12 @@ abstract class AbstractSegment implements Segment {
   String tagName = ""
   String ediString = ""
 
-  EDIInterchangeMessage interchangeMessage
+  InterchangeMessage interchangeMessage
 
   def AbstractSegment() {
   }
 
-  def AbstractSegment(EDIInterchangeMessage interchangeMessage) {
+  def AbstractSegment(InterchangeMessage interchangeMessage) {
     this.interchangeMessage = interchangeMessage;
   }
 
