@@ -10,9 +10,9 @@ import static info.sargis.gedi.EDIConfig.EOL
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-abstract class EDISegment implements Segment {
+abstract class AbstractSegment implements Segment {
 
-  String tagName
+  String tagName = ""
   String ediString = ""
 
   def data(Closure closure) {

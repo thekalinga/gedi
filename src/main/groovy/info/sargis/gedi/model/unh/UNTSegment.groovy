@@ -1,6 +1,6 @@
 package info.sargis.gedi.model.unh
 
-import info.sargis.gedi.model.EDISegment
+import info.sargis.gedi.model.AbstractSegment
 import static info.sargis.gedi.EDIConfig.EOL
 
 /**
@@ -10,7 +10,7 @@ import static info.sargis.gedi.EDIConfig.EOL
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class UNTSegment extends EDISegment {
+class UNTSegment extends AbstractSegment {
 
   Integer msgCount
   String msgRefNbr

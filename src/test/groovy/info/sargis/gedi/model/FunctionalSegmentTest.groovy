@@ -15,11 +15,11 @@ import org.testng.annotations.Test
  */
 class FunctionalSegmentTest {
 
-  FunctionalSegment functionalSegment
+  FunctionalGroupPayload functionalSegment
 
   @BeforeMethod
   public void setUp() {
-    functionalSegment = new FunctionalSegment()
+    functionalSegment = new FunctionalGroupPayload()
     functionalSegment.ungSegment = new UNGSegment()
 
   }
@@ -46,8 +46,8 @@ class FunctionalSegmentTest {
     Assert.assertEquals(functionalSegment.toEDI(), expectedEDI.stripIndent());
   }
 
-  private MessageSegment createFirstMessageSegment() {
-    MessageSegment messageSegment = new MessageSegment()
+  private MessagePayload createFirstMessageSegment() {
+    MessagePayload messageSegment = new MessagePayload()
     messageSegment.unhSegment = new UNHSegment()
 
     messageSegment.addUserSegment(new UserSegment(tagName: "C01"))
@@ -56,8 +56,8 @@ class FunctionalSegmentTest {
     return messageSegment
   }
 
-  private MessageSegment createSecondMessageSegment() {
-    MessageSegment messageSegment = new MessageSegment()
+  private MessagePayload createSecondMessageSegment() {
+    MessagePayload messageSegment = new MessagePayload()
     messageSegment.unhSegment = new UNHSegment()
 
     messageSegment.addUserSegment(new UserSegment(tagName: "X01"))

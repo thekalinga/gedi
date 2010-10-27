@@ -20,14 +20,14 @@ class EDIBuilder extends BuilderSupport {
 
   private static final UNASegment DEFAULT_UNA = new UNASegment();
 
-  private EDIModel ediModel
+  private EDIInterchangeMessage ediModel
   private Writer writer
 
   private Segment currentSegment
 
   def EDIBuilder(Writer writer) {
     this.writer = writer
-    ediModel = new EDIModel()
+    ediModel = new EDIInterchangeMessage()
     ediModel.unaSegment = DEFAULT_UNA;
   }
 
@@ -47,29 +47,29 @@ class EDIBuilder extends BuilderSupport {
     LOGGER.debug("Parameters in setParent(): {}, {}", parent.class.name, child.class.name)
 
     switch (child) {
-      case InterchangeMessage:
+      case InterchangePayload:
         throw new EDIBuilderException("UNB segment should be top level segment for EDI Model");
-      case FunctionalSegment:
+      case FunctionalGroupPayload:
 
-        if (parent instanceof InterchangeMessage) {
+        if (parent instanceof InterchangePayload) {
           parent.addFunctionalSegment(child)
         } else {
           throw new EDIBuilderException("UNG segment can be added only to UNB");
         }
         break
 
-      case MessageSegment:
+      case MessagePayload:
 
-        if (parent instanceof InterchangeMessage) {
-          InterchangeMessage iMessage = (InterchangeMessage) parent
+        if (parent instanceof InterchangePayload) {
+          InterchangePayload iMessage = (InterchangePayload) parent
 
           def segments = iMessage.getFunctionalSegments()
           if (segments) {
-            FunctionalSegment functionalSegment = new ConditionalFunctionalSegment()
+            FunctionalGroupPayload functionalSegment = new ConditionalFunctionalGroupPayload()
             parent.addFunctionalSegment(functionalSegment)
           }
           segments[0].addMessageSegment(child)
-        } else if (parent instanceof FunctionalSegment) {
+        } else if (parent instanceof FunctionalGroupPayload) {
           parent.addMessageSegment(child)
         } else {
           throw new EDIBuilderException("UNH segment can be added only to UNB or UNG segments");
@@ -78,7 +78,7 @@ class EDIBuilder extends BuilderSupport {
 
       case Segment:
 
-        if (parent instanceof MessageSegment) {
+        if (parent instanceof MessagePayload) {
           parent.addUserSegment(child)
         } else {
           throw new EDIBuilderException("User data segment can be added only to UNH segment");
@@ -95,20 +95,20 @@ class EDIBuilder extends BuilderSupport {
   protected Object createNode(Object name) {
     switch (name) {
       case "UNB":
-        InterchangeMessage interchangeMessage = new InterchangeMessage()
+        InterchangePayload interchangeMessage = new InterchangePayload()
         interchangeMessage.with {
           unbSegment = new UNBSegment()
         }
         ediModel.interchangeMessage = interchangeMessage
         return interchangeMessage
       case "UNG":
-        FunctionalSegment functionalSegment = new FunctionalSegment()
+        FunctionalGroupPayload functionalSegment = new FunctionalGroupPayload()
         functionalSegment.with {
           ungSegment = new UNGSegment()
         }
         return functionalSegment
       case "UNH":
-        MessageSegment messageSegment = new MessageSegment()
+        MessagePayload messageSegment = new MessagePayload()
         messageSegment.with {
           unhSegment = new UNHSegment()
         }
@@ -131,8 +131,8 @@ class EDIBuilder extends BuilderSupport {
   }
 
   def data(Closure closure) {
-    if (currentSegment instanceof EDISegment) {
-      EDISegment ediSegment = (EDISegment) currentSegment
+    if (currentSegment instanceof AbstractSegment) {
+      AbstractSegment ediSegment = (AbstractSegment) currentSegment
       ediSegment.data(closure)
     } else {
       throw new EDIBuilderException("data definition can be aplied only for EDI Segment");

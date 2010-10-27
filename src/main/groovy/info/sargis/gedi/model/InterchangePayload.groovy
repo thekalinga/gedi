@@ -10,17 +10,17 @@ import info.sargis.gedi.model.unb.UNZSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class InterchangeMessage implements Segment {
+class InterchangePayload implements Segment {
 
-  private List<FunctionalSegment> functionalSegments = []
+  private List<FunctionalGroupPayload> functionalSegments = []
 
   UNBSegment unbSegment
 
-  def addFunctionalSegment(FunctionalSegment functionalSegment) {
+  def addFunctionalSegment(FunctionalGroupPayload functionalSegment) {
     functionalSegments << functionalSegment
   }
 
-  List<FunctionalSegment> getFunctionalSegments() {
+  List<FunctionalGroupPayload> getFunctionalSegments() {
     return Collections.unmodifiableList(functionalSegments)
   }
 
@@ -48,7 +48,7 @@ class InterchangeMessage implements Segment {
   private int getMessageCount() {
     assert functionalSegments
 
-    if (functionalSegments[0] instanceof ConditionalFunctionalSegment) {
+    if (functionalSegments[0] instanceof ConditionalFunctionalGroupPayload) {
       return functionalSegments[0].getMessageSegments().size()
     }
     return functionalSegments.size()

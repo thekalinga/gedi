@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class EDIModel implements Segment {
+class EDIInterchangeMessage implements Segment {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(EDIModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EDIInterchangeMessage.class);
 
   UNASegment unaSegment
-  InterchangeMessage interchangeMessage
+  InterchangePayload interchangeMessage
 
-  def EDIModel() {
+  def EDIInterchangeMessage() {
   }
 
   String toEDI() {

@@ -9,7 +9,7 @@ import static info.sargis.gedi.EDIConfig.EOL
  * User: Sargis Harutyunyan
  * Date: Oct 21, 2010
  */
-class UNASegment extends EDISegment {
+class UNASegment extends AbstractSegment {
 
   String compDataSep = ":"
   String dataElemSeparator = "+"

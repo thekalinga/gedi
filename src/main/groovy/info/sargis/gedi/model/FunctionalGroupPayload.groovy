@@ -10,17 +10,17 @@ import info.sargis.gedi.model.ung.UNGSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class FunctionalSegment implements Segment {
+class FunctionalGroupPayload implements Segment {
 
-  private List<MessageSegment> messageSegments = []
+  private List<MessagePayload> messageSegments = []
 
   UNGSegment ungSegment;
 
-  def addMessageSegment(MessageSegment messageSegment) {
+  def addMessageSegment(MessagePayload messageSegment) {
     messageSegments << messageSegment
   }
 
-  List<MessageSegment> getMessageSegments() {
+  List<MessagePayload> getMessageSegments() {
     return Collections.unmodifiableList(messageSegments)
   }
 

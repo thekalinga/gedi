@@ -7,7 +7,7 @@ package info.sargis.gedi.model
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class ConditionalFunctionalSegment extends FunctionalSegment {
+class ConditionalFunctionalGroupPayload extends FunctionalGroupPayload {
 
   def String toEDI() {
     assert messageSegments

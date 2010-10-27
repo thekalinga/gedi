@@ -14,11 +14,11 @@ import org.testng.annotations.Test
  */
 class MessageSegmentTest {
 
-  MessageSegment messageSegment
+  MessagePayload messageSegment
 
   @BeforeMethod
   public void setUp() {
-    messageSegment = new MessageSegment()
+    messageSegment = new MessagePayload()
     messageSegment.unhSegment = new UNHSegment()
   }
 
