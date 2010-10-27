@@ -25,6 +25,6 @@ class UNESegment extends AbstractSegment {
   }
 
   String toEDI() {
-    return "${tagName}+${msgCount}+${grpRefNbr}${interchangeMessage.eol}"
+    return "${tagName}+${msgCount}+${grpRefNbr}${interchangeMessage.segmentTerminator}${interchangeMessage.eol}"
   }
 }

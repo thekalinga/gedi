@@ -22,9 +22,10 @@ class EDIInterchangeMessage implements Segment, InterchangeMessage {
   private InterchangePayload interchangePayload
 
   def EDIInterchangeMessage() {
+    this(new UNASegment())
   }
 
-  void setUnaSegment(UNASegment unaSegment) {
+  def EDIInterchangeMessage(UNASegment unaSegment) {
     unaSegment.interchangeMessage = this
     this.unaSegment = unaSegment
   }

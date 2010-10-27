@@ -24,21 +24,21 @@ class InterchangeMessageTest {
   public void testToEDIWithFunctionalGroups() throws Exception {
 
     def expectedEDI = '''\
-      UNB
-      UNG
-      UNH
+      UNB'
+      UNG'
+      UNH'
       C01+'
       C22+'
       C55+'
-      UNT+3+UNH0111DUMMY
-      UNE+1+UNG0111DUMMY
-      UNG
-      UNH
+      UNT+3+UNH0111DUMMY'
+      UNE+1+UNG0111DUMMY'
+      UNG'
+      UNH'
       X01+'
       X22+'
-      UNT+2+UNH0111DUMMY
-      UNE+1+UNG0111DUMMY
-      UNZ+2+UNB0111DUMMY
+      UNT+2+UNH0111DUMMY'
+      UNE+1+UNG0111DUMMY'
+      UNZ+2+UNB0111DUMMY'
       '''
 
     InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
@@ -53,17 +53,17 @@ class InterchangeMessageTest {
   public void testToEDIWithoutFunctionalGroups() throws Exception {
 
     def expectedEDI = '''\
-      UNB
-      UNH
+      UNB'
+      UNH'
       C01+'
       C22+'
       C55+'
-      UNT+3+UNH0111DUMMY
-      UNH
+      UNT+3+UNH0111DUMMY'
+      UNH'
       X01+'
       X22+'
-      UNT+2+UNH0111DUMMY
-      UNZ+2+UNB0111DUMMY
+      UNT+2+UNH0111DUMMY'
+      UNZ+2+UNB0111DUMMY'
       '''
 
     InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()

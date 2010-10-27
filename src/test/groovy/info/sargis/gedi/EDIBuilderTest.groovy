@@ -14,8 +14,7 @@ class EDIBuilderTest {
 
   @Test
   public void testToEDI() throws Exception {
-    StringWriter sw = new StringWriter()
-    EDIBuilder edi = new EDIBuilder(sw)
+    EDIBuilder edi = new EDIBuilder()
 
     edi.UNB {
       UNG {
@@ -53,23 +52,25 @@ class EDIBuilderTest {
 
       }
     }
-    edi.build()
+
+    StringWriter sw = new StringWriter()
+    edi.build(sw)
 
     def expectedEDI = '''\
       UNA:+.? '
-      UNB
-      UNG
-      UNH
+      UNB'
+      UNG'
+      UNH'
       CS0+SSS:SARG:+12222+3666'
       CS1+:NNN+12222+3666'
       CS2+366+12222+::::REF454'
-      UNT+3+UNH0111DUMMY
-      UNH
+      UNT+3+UNH0111DUMMY'
+      UNH'
       XS0+XXX::233:DD+12222+3666'
       XS1+3444'
-      UNT+2+UNH0111DUMMY
-      UNE+2+UNG0111DUMMY
-      UNZ+1+UNB0111DUMMY
+      UNT+2+UNH0111DUMMY'
+      UNE+2+UNG0111DUMMY'
+      UNZ+1+UNB0111DUMMY'
       '''
 
     Assert.assertEquals(sw.toString(), expectedEDI.stripIndent())

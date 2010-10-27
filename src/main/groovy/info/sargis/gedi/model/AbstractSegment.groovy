@@ -31,7 +31,7 @@ abstract class AbstractSegment implements Segment {
 
   String toEDI() {
     assert interchangeMessage
-    return "$tagName+$ediString'${interchangeMessage.eol}";
+    return "$tagName+$ediString${interchangeMessage.segmentTerminator}${interchangeMessage.eol}";
   }
 
 

@@ -19,22 +19,18 @@ class EDIBuilder extends BuilderSupport {
   private static final UNASegment DEFAULT_UNA = new UNASegment();
 
   private EDIInterchangeMessage ediMessage
-  private Writer writer
 
   private Segment currentSegment
 
-  def EDIBuilder(Writer writer) {
-    this.writer = writer
-
-    ediMessage = new EDIInterchangeMessage()
-    ediMessage.unaSegment = DEFAULT_UNA;
+  def EDIBuilder() {
+    this(DEFAULT_UNA)
   }
 
-  public void serviceStringAdvice(UNASegment unaSegment) {
-    ediMessage.unaSegment = unaSegment
+  def EDIBuilder(UNASegment unaSegment) {
+    ediMessage = new EDIInterchangeMessage(unaSegment)
   }
 
-  def build() {
+  def build(Writer writer) {
     writer.write(ediMessage.toEDI())
     writer.flush()
   }

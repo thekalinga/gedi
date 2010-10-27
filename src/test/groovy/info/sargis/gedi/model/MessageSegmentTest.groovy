@@ -30,11 +30,11 @@ class MessageSegmentTest {
     messageSegment.addUserSegment(interchangeMessage.createUserSegment("C55"))
 
     def expectedEDI = '''\
-      UNH
+      UNH'
       C01+'
       C22+'
       C55+'
-      UNT+3+UNH0111DUMMY
+      UNT+3+UNH0111DUMMY'
     '''
     Assert.assertEquals(messageSegment.toEDI(), expectedEDI.stripIndent());
   }

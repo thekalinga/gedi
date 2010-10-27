@@ -30,17 +30,17 @@ class FunctionalSegmentTest {
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
     def expectedEDI = '''\
-      UNG
-      UNH
+      UNG'
+      UNH'
       C01+'
       C22+'
       C55+'
-      UNT+3+UNH0111DUMMY
-      UNH
+      UNT+3+UNH0111DUMMY'
+      UNH'
       X01+'
       X22+'
-      UNT+2+UNH0111DUMMY
-      UNE+2+UNG0111DUMMY
+      UNT+2+UNH0111DUMMY'
+      UNE+2+UNG0111DUMMY'
     '''
     Assert.assertEquals(functionalSegment.toEDI(), expectedEDI.stripIndent());
   }
