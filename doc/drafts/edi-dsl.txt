@@ -4,10 +4,11 @@ edi.serviceStringAdvice(new UNASegment(
     )
 )
 edi.UNB {
+        data {
+        ["UNOB", 1] + ["gslg071", "ZZ"] + ["gcms003", "ZZ"] + [101013, 1129] + 1013115727000 + "" + "CLSVAL"
+        }
+        
         UNG {
-            data {
-              [UNOB, 1] + [gslg071, ZZ] + [gcms003, ZZ] + [101013, 1129] + 1013115727000 + "" + "CLSVAL"  
-            }
             UNH {
                 data {
                   "001" + "CLSVAL" + 1 + 972 + "MN"

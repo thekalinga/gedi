@@ -24,7 +24,7 @@ class FunctionalGroupPayload implements Segment {
   }
 
   def addMessageSegment(MessagePayload messageSegment) {
-    messageSegment.ediMessage = ediMessage
+    messageSegment.interchangeMessage = ediMessage
     messageSegments << messageSegment
   }
 

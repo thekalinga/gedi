@@ -31,12 +31,12 @@ class FunctionalSegmentTest {
 
     def expectedEDI = '''\
       UNG'
-      UNH'
+      UNH+'
       C01+'
       C22+'
       C55+'
       UNT+3+UNH0111DUMMY'
-      UNH'
+      UNH+'
       X01+'
       X22+'
       UNT+2+UNH0111DUMMY'

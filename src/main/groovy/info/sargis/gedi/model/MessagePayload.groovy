@@ -10,17 +10,17 @@ import info.sargis.gedi.model.unh.UNTSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class MessagePayload implements Segment {
+class MessagePayload extends AbstractSegment {
 
   private List<Segment> userSegments = []
 
-  EDIInterchangeMessage ediMessage
+  EDIInterchangeMessage interchangeMessage
 
   def MessagePayload() {
   }
 
-  def MessagePayload(EDIInterchangeMessage ediMessage) {
-    this.ediMessage = ediMessage;
+  def MessagePayload(EDIInterchangeMessage interchangeMessage) {
+    this.interchangeMessage = interchangeMessage;
   }
 
   def addUserSegment(UserSegment segment) {
@@ -47,14 +47,14 @@ class MessagePayload implements Segment {
   }
 
   UNHSegment getUnhSegment() {
-    return new UNHSegment(ediMessage)
+    return new UNHSegment(interchangeMessage: interchangeMessage, ediString: ediString)
   }
 
   UNTSegment getUntSegment(UNHSegment unhSegment) {
     UNTSegment untSegment = new UNTSegment(
             msgCount: userSegments.size(), msgRefNbr: unhSegment.msgRefNbr
     )
-    untSegment.interchangeMessage = ediMessage
+    untSegment.interchangeMessage = interchangeMessage
 
     return untSegment
   }

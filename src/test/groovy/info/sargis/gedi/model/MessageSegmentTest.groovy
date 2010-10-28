@@ -30,7 +30,7 @@ class MessageSegmentTest {
     messageSegment.addUserSegment(interchangeMessage.createUserSegment("C55"))
 
     def expectedEDI = '''\
-      UNH'
+      UNH+'
       C01+'
       C22+'
       C55+'

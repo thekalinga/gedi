@@ -24,6 +24,10 @@ class EDIBuilderTest {
       UNG {
 
         UNH {
+          data {
+            "001" + ["CLSVAL", 1, 972, "MN"]
+          }
+
           CS0 {
             data {
               ["SSS", "SARG", ""] + 12222 + 3666
@@ -42,6 +46,10 @@ class EDIBuilderTest {
         }
 
         UNH {
+          data {
+            "001" + ["CLSVAL", 1, 1000, "MN"]
+          }
+
           XS0 {
             data {
               ["XXX", "", 233, "DD"] + 12222.33 + 3666
@@ -64,12 +72,12 @@ class EDIBuilderTest {
       UNA:+.? '
       UNB+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'
       UNG'
-      UNH'
+      UNH+001+CLSVAL:1:972:MN'
       CS0+SSS:SARG:+12222+3666'
       CS1+:NNN+12222+3666'
       CS2+366+12222+::::REF454'
       UNT+3+UNH0111DUMMY'
-      UNH'
+      UNH+001+CLSVAL:1:1000:MN'
       XS0+XXX::233:DD+12222.33+3666'
       XS1+3444'
       UNT+2+UNH0111DUMMY'
