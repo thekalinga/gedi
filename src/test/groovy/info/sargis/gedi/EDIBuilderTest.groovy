@@ -1,6 +1,7 @@
 package info.sargis.gedi
 
 import org.testng.Assert
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 /**
@@ -12,9 +13,15 @@ import org.testng.annotations.Test
  */
 class EDIBuilderTest {
 
+  EDIBuilder edi
+
+  @BeforeMethod
+  public void setUp() {
+    edi = new EDIBuilder()
+  }
+
   @Test
   public void testToEDI() throws Exception {
-    EDIBuilder edi = new EDIBuilder()
 
     edi.UNB {
       data {
@@ -106,6 +113,63 @@ class EDIBuilderTest {
       TAX:1:2+CUD+500'
       UNT+5+UNH0111DUMMY'
       UNE+2+UNG0111DUMMY'
+      UNZ+1+UNB0111DUMMY'
+      '''
+
+    Assert.assertEquals(sw.toString(), expectedEDI.stripIndent())
+  }
+
+  @Test
+  public void testToEDIWithIteration() throws Exception {
+
+    edi.UNB {
+      data {
+        ["UNOB", 1] + ["gslg071", "ZZ"] + ["gcms003", "ZZ"] + [101013, 1129] + 1013115727000 + "" + "CLSVAL"
+      }
+
+      UNH {
+        data {
+          "001" + ["CLSVAL", 1, 1000, "MN"]
+        }
+
+        XS0 {
+          data {
+            ["XXX", "", 233, "DD"] + 12222.33 + 3666
+          }
+        }
+
+        ITM {
+          data {
+            1256.23 + 20 + ["DESC LINE 1", "DESC LINE 2"]
+          }
+        }
+
+        for (index in 1..2) {
+
+          TAX([1, index]) {
+            data {
+              "CUD" + 500.00
+            }
+          }
+
+        }
+
+      } // END OF UNH
+
+    }
+
+    StringWriter sw = new StringWriter()
+    edi.build(sw)
+
+    def expectedEDI = '''\
+      UNA:+.? '
+      UNB+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'
+      UNH+001+CLSVAL:1:1000:MN'
+      XS0+XXX::233:DD+12222.33+3666'
+      ITM+1256.23+20+DESC LINE 1:DESC LINE 2'
+      TAX:1:1+CUD+500'
+      TAX:1:2+CUD+500'
+      UNT+4+UNH0111DUMMY'
       UNZ+1+UNB0111DUMMY'
       '''
 

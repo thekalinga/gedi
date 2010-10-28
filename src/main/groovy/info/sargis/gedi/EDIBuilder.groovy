@@ -54,7 +54,7 @@ class EDIBuilder extends BuilderSupport {
           InterchangePayload iMessage = (InterchangePayload) parent
 
           def segments = iMessage.getFunctionalSegments()
-          if (segments) {
+          if (!segments) {
             parent.addFunctionalSegment(ediMessage.createConditionalFunctionalPayload())
           }
           segments[0].addMessageSegment(child)
