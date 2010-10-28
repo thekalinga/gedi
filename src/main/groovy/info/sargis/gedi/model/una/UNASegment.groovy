@@ -1,6 +1,6 @@
 package info.sargis.gedi.model.una
 
-import info.sargis.gedi.model.AbstractSegment
+import info.sargis.gedi.EDISegment
 import info.sargis.gedi.model.InterchangeMessage
 
 /**
@@ -10,7 +10,7 @@ import info.sargis.gedi.model.InterchangeMessage
  * User: Sargis Harutyunyan
  * Date: Oct 21, 2010
  */
-class UNASegment extends AbstractSegment {
+class UNASegment extends EDISegment {
 
   String compDataSep = ":"
   String dataElemSeparator = "+"

@@ -1,6 +1,6 @@
 package info.sargis.gedi.model.ung
 
-import info.sargis.gedi.model.AbstractSegment
+import info.sargis.gedi.EDISegment
 import info.sargis.gedi.model.InterchangeMessage
 
 /**
@@ -10,7 +10,7 @@ import info.sargis.gedi.model.InterchangeMessage
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class UNESegment extends AbstractSegment {
+class UNESegment extends EDISegment {
 
   Integer msgCount
   String grpRefNbr

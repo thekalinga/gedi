@@ -1,5 +1,7 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.EDISegment
+
 /**
  * Copyrights 2002-2010 Webb Fontaine
  * This software is the proprietary information of Webb Fontaine.
@@ -7,7 +9,7 @@ package info.sargis.gedi.model
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class UserSegment extends AbstractSegment {
+class UserSegment extends EDISegment {
 
   def UserSegment() {
   }
