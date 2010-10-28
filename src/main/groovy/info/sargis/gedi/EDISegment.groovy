@@ -1,6 +1,6 @@
 package info.sargis.gedi
 
-import info.sargis.gedi.model.AbstractSegment
+import info.sargis.gedi.model.DataSupportSegment
 import info.sargis.gedi.model.InterchangeMessage
 
 /**
@@ -10,7 +10,7 @@ import info.sargis.gedi.model.InterchangeMessage
  * User: Sargis Harutyunyan
  * Date: Oct 28, 2010
  */
-class EDISegment extends AbstractSegment {
+class EDISegment extends DataSupportSegment {
 
   String tagName = ""
   private String tagData = ""

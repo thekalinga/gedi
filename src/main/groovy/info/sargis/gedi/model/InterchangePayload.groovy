@@ -10,7 +10,7 @@ import info.sargis.gedi.model.unb.UNZSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class InterchangePayload extends AbstractSegment {
+class InterchangePayload extends DataSupportSegment {
 
   private List<FunctionalGroupPayload> functionalSegments = []
 

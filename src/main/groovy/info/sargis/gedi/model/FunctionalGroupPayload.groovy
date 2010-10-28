@@ -10,7 +10,7 @@ import info.sargis.gedi.model.ung.UNGSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class FunctionalGroupPayload extends AbstractSegment {
+class FunctionalGroupPayload extends DataSupportSegment {
 
   private List<MessagePayload> messageSegments = []
 

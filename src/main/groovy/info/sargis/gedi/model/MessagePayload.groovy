@@ -10,7 +10,7 @@ import info.sargis.gedi.model.unh.UNTSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class MessagePayload extends AbstractSegment {
+class MessagePayload extends DataSupportSegment {
 
   private List<Segment> userSegments = []
 

@@ -9,7 +9,7 @@ import info.sargis.gedi.EDIDSLCategory
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-abstract class AbstractSegment implements Segment {
+abstract class DataSupportSegment implements Segment {
 
   String ediDataString = ""
 

@@ -107,8 +107,8 @@ class EDIBuilder extends BuilderSupport {
   }
 
   def data(Closure closure) {
-    if (currentSegment instanceof AbstractSegment) {
-      AbstractSegment ediSegment = (AbstractSegment) currentSegment
+    if (currentSegment instanceof DataSupportSegment) {
+      DataSupportSegment ediSegment = (DataSupportSegment) currentSegment
       ediSegment.data(closure)
     } else {
       throw new EDIBuilderException("Data definition can be applied only for EDI Segment");
