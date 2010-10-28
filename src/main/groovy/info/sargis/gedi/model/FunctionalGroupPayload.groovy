@@ -10,21 +10,21 @@ import info.sargis.gedi.model.ung.UNGSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class FunctionalGroupPayload implements Segment {
+class FunctionalGroupPayload extends AbstractSegment {
 
   private List<MessagePayload> messageSegments = []
 
-  EDIInterchangeMessage ediMessage
+  EDIInterchangeMessage interchangeMessage
 
   def FunctionalGroupPayload() {
   }
 
-  def FunctionalGroupPayload(EDIInterchangeMessage ediMessage) {
-    this.ediMessage = ediMessage
+  def FunctionalGroupPayload(EDIInterchangeMessage interchangeMessage) {
+    this.interchangeMessage = interchangeMessage
   }
 
   def addMessageSegment(MessagePayload messageSegment) {
-    messageSegment.interchangeMessage = ediMessage
+    messageSegment.interchangeMessage = interchangeMessage
     messageSegments << messageSegment
   }
 
@@ -33,7 +33,7 @@ class FunctionalGroupPayload implements Segment {
   }
 
   String toEDI() {
-    assert ediMessage
+    assert interchangeMessage
     assert messageSegments
 
     StringBuilder sb = new StringBuilder()
@@ -49,14 +49,14 @@ class FunctionalGroupPayload implements Segment {
   }
 
   private UNGSegment getUngSegment() {
-    return new UNGSegment(ediMessage)
+    return new UNGSegment(interchangeMessage: interchangeMessage, ediString: ediString)
   }
 
   private UNESegment getUneSegment(UNGSegment ungSegment) {
     UNESegment uneSegment = new UNESegment(
             msgCount: messageSegments.size(), grpRefNbr: ungSegment.msgRefNbr
     )
-    uneSegment.interchangeMessage = ediMessage
+    uneSegment.interchangeMessage = interchangeMessage
 
     return uneSegment
   }

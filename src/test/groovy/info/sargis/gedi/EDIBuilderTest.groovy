@@ -22,6 +22,9 @@ class EDIBuilderTest {
       }
 
       UNG {
+        data {
+          "FCVRGR" + "sargis" + "valuewebb" + [101028, 1451] + "CTRLREF"
+        }
 
         UNH {
           data {
@@ -71,7 +74,7 @@ class EDIBuilderTest {
     def expectedEDI = '''\
       UNA:+.? '
       UNB+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'
-      UNG'
+      UNG+FCVRGR+sargis+valuewebb+101028:1451+CTRLREF'
       UNH+001+CLSVAL:1:972:MN'
       CS0+SSS:SARG:+12222+3666'
       CS1+:NNN+12222+3666'

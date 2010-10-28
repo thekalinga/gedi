@@ -30,7 +30,7 @@ class FunctionalSegmentTest {
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
     def expectedEDI = '''\
-      UNG'
+      UNG+'
       UNH+'
       C01+'
       C22+'
