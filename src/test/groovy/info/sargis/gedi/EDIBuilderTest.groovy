@@ -40,7 +40,7 @@ class EDIBuilderTest {
         UNH {
           XS0 {
             data {
-              ["XXX", "", 233, "DD"] + 12222 + 3666
+              ["XXX", "", 233, "DD"] + 12222.33 + 3666
             }
           }
           XS1 {
@@ -66,7 +66,7 @@ class EDIBuilderTest {
       CS2+366+12222+::::REF454'
       UNT+3+UNH0111DUMMY'
       UNH'
-      XS0+XXX::233:DD+12222+3666'
+      XS0+XXX::233:DD+12222.33+3666'
       XS1+3444'
       UNT+2+UNH0111DUMMY'
       UNE+2+UNG0111DUMMY'

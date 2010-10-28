@@ -1,6 +1,5 @@
 package info.sargis.gedi
 
-import info.sargis.gedi.model.una.UNASegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import info.sargis.gedi.model.*
@@ -16,18 +15,12 @@ class EDIBuilder extends BuilderSupport {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EDIBuilder.class);
 
-  private static final UNASegment DEFAULT_UNA = new UNASegment();
-
   private EDIInterchangeMessage ediMessage
 
   private Segment currentSegment
 
   def EDIBuilder() {
-    this(DEFAULT_UNA)
-  }
-
-  def EDIBuilder(UNASegment unaSegment) {
-    ediMessage = new EDIInterchangeMessage(unaSegment)
+    ediMessage = new EDIInterchangeMessage(EDIDSLCategory.currentUnaConfig)
   }
 
   def build(Writer writer) {

@@ -1,5 +1,6 @@
 package info.sargis.gedi
 
+import info.sargis.gedi.model.una.UNASegment
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
@@ -13,56 +14,80 @@ import java.text.NumberFormat
  */
 class EDIDSLCategory {
 
+  private static final UNASegment DEFAULT_UNA = new UNASegment();
+
+  private static UNASegment currentUnaConfig
+
+  public static String dataElemSeparator
+  public static String compDataSeparator
+  public static String decimalNotation
+
+  static {
+    configEDIDSLSupportCategory(DEFAULT_UNA)
+  }
+
+  /**
+   * Configuring EDIDSLCategory for UNA segment, class is not thread safe
+   * @param una
+   */
+  public static void configEDIDSLSupportCategory(UNASegment una) {
+    synchronized (EDIDSLCategory.class) {
+      EDIDSLCategory.currentUnaConfig = una
+
+      dataElemSeparator = una.dataElemSeparator
+      compDataSeparator = una.compDataSep
+      decimalNotation = una.decimalNotation
+    }
+  }
+
   static String plus(List self, List list) {
     def selfEdi = toEDICompositeElement(self)
     def listEdi = toEDICompositeElement(list)
-    "$selfEdi+$listEdi"
+    "${selfEdi}${dataElemSeparator}${listEdi}"
   }
 
   static String plus(List self, String str) {
     def selfEdi = toEDICompositeElement(self)
-    "$selfEdi+$str"
+    "${selfEdi}${dataElemSeparator}${str}"
   }
 
   static String plus(List self, Number number) {
     def selfEdi = toEDICompositeElement(self)
-    "$selfEdi+$number"
+    "${selfEdi}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}"
   }
 
 
   static String plus(Number self, Number number) {
-    "$self+$number"
+    "${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${number}"
   }
 
   static String plus(Number self, String str) {
-    "$self+$str"
+    "${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${str}"
   }
 
   static String plus(Number self, List list) {
     def listEdi = toEDICompositeElement(list)
-    "$self+$listEdi"
+    "${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${listEdi}"
   }
 
-  static String toString(Number self) {
-    return formatNumber(self, '.' as char)
-  }
 
   static String plus(String self, String str) {
-    "$self+$str"
-  }
-
-
-  static String plus(String self, Number number) {
-    "$self+$number"
+    "${self}${dataElemSeparator}${str}"
   }
 
   static String plus(String self, List list) {
     def listEdi = toEDICompositeElement(list)
-    "$self+$listEdi"
+    "${self}${dataElemSeparator}${listEdi}"
   }
 
-  static String toEDICompositeElement(List list) {
-    list.join(":")
+  static String plus(String self, Number number) {
+    "${self}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}"
+  }
+
+
+
+  private static String toEDICompositeElement(List list) {
+    list.join(compDataSeparator)
   }
 
   static String formatNumber(Number self, char decSeparator) {

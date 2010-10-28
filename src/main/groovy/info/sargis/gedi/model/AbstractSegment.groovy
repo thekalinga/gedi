@@ -31,14 +31,13 @@ abstract class AbstractSegment implements Segment {
 
   String toEDI() {
     assert interchangeMessage
-    return "$tagName+$ediString${interchangeMessage.segmentTerminator}${interchangeMessage.eol}";
+    StringBuilder sb = new StringBuilder()
+
+    sb << tagName << interchangeMessage.dataElemSeparator << ediString
+    sb << interchangeMessage.segmentTerminator << interchangeMessage.eol
+
+    return sb.toString();
   }
 
 
-  public String toString() {
-    return "AbstractSegment{" +
-            "tagName='" + tagName + '\'' +
-            ", ediString='" + ediString + '\'' +
-            '}';
-  }
 }
