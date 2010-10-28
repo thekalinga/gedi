@@ -23,16 +23,19 @@ class EDISegment extends DataSupportSegment {
     this.interchangeMessage = interchangeMessage;
   }
 
-  public void setTagData(List tagData) {
-    this.tagData = interchangeMessage.compDataSeparator + tagData.join(interchangeMessage.compDataSeparator)
-  }
+  public void setTagData(Object tagData) {
+    def list
 
-  public void setTagData(String tagData) {
-    this.tagData = interchangeMessage.compDataSeparator + tagData
+    if (tagData instanceof List) list = tagData
+    else {
+      list = [tagData.toString()]
+    }
+
+    this.tagData = interchangeMessage.compDataSeparator + list.join(interchangeMessage.compDataSeparator)
   }
 
   public String getTagData() {
-    tagData
+    this.tagData
   }
 
   String toEDI() {
@@ -40,7 +43,7 @@ class EDISegment extends DataSupportSegment {
 
     StringBuilder sb = new StringBuilder()
 
-    sb << tagName << tagData << interchangeMessage.dataElemSeparator << ediDataString
+    sb << tagName << this.tagData << interchangeMessage.dataElemSeparator << ediDataString
     sb << interchangeMessage.segmentTerminator << interchangeMessage.eol
 
     return sb.toString();

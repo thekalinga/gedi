@@ -46,12 +46,13 @@ class EDIBuilderTest {
               366 + 12222 + ["", "", "", "", "REF454"]
             }
           }
-        }
+        } // END OF UNH
 
         UNH {
           data {
             "001" + ["CLSVAL", 1, 1000, "MN"]
           }
+
 
           XS0 {
             data {
@@ -63,7 +64,24 @@ class EDIBuilderTest {
               3444
             }
           }
-        }
+
+          ITM {
+            data {
+              1256.23 + 20 + ["DESC LINE 1", "DESC LINE 2"]
+            }
+          }
+          TAX([1, 1]) {
+            data {
+              "DTY" + 128.23
+            }
+          }
+          TAX([1, 2]) {
+            data {
+              "CUD" + 500.00
+            }
+          }
+
+        } // END OF UNH
 
       }
     }
@@ -83,7 +101,10 @@ class EDIBuilderTest {
       UNH+001+CLSVAL:1:1000:MN'
       XS0+XXX::233:DD+12222.33+3666'
       XS1+3444'
-      UNT+2+UNH0111DUMMY'
+      ITM+1256.23+20+DESC LINE 1:DESC LINE 2'
+      TAX:1:1+DTY+128.23'
+      TAX:1:2+CUD+500'
+      UNT+5+UNH0111DUMMY'
       UNE+2+UNG0111DUMMY'
       UNZ+1+UNB0111DUMMY'
       '''

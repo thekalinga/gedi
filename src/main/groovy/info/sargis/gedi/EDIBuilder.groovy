@@ -1,6 +1,7 @@
 package info.sargis.gedi
 
 import info.sargis.gedi.model.seg.DataSupportSegment
+import info.sargis.gedi.model.seg.EDISegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import info.sargis.gedi.model.*
@@ -96,7 +97,13 @@ class EDIBuilder extends BuilderSupport {
   }
 
   protected Object createNode(Object name, Object value) {
-    return createNode(name);
+    Object segment = createNode(name)
+    if (segment instanceof EDISegment) {
+      segment.tagData = value
+      return segment
+    }
+
+    throw new EDIBuilderException("Unsupported operation, can create segment with tag composite values only for EDISegment");
   }
 
   protected Object createNode(Object name, Map attributes) {

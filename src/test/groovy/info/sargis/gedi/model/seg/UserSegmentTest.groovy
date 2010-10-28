@@ -1,6 +1,6 @@
-package info.sargis.gedi.model
+package info.sargis.gedi.model.seg
 
-import info.sargis.gedi.model.seg.UserSegment
+import info.sargis.gedi.model.EDIInterchangeMessage
 import org.testng.Assert
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
