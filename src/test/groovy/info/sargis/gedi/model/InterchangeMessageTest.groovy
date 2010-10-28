@@ -24,7 +24,7 @@ class InterchangeMessageTest {
   public void testToEDIWithFunctionalGroups() throws Exception {
 
     def expectedEDI = '''\
-      UNB'
+      UNB+'
       UNG'
       UNH'
       C01+'
@@ -53,7 +53,7 @@ class InterchangeMessageTest {
   public void testToEDIWithoutFunctionalGroups() throws Exception {
 
     def expectedEDI = '''\
-      UNB'
+      UNB+'
       UNH'
       C01+'
       C22+'

@@ -82,7 +82,9 @@ class EDIBuilder extends BuilderSupport {
   protected Object createNode(Object name) {
     switch (name) {
       case "UNB":
-        return ediMessage.createInterchangePayload()
+        InterchangePayload interchangePayload = ediMessage.createInterchangePayload()
+        currentSegment = interchangePayload
+        return interchangePayload
       case "UNG":
         return ediMessage.createFunctionalPayload()
       case "UNH":
@@ -109,7 +111,7 @@ class EDIBuilder extends BuilderSupport {
       AbstractSegment ediSegment = (AbstractSegment) currentSegment
       ediSegment.data(closure)
     } else {
-      throw new EDIBuilderException("data definition can be aplied only for EDI Segment");
+      throw new EDIBuilderException("Data definition can be applied only for EDI Segment");
     }
   }
 

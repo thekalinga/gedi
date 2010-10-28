@@ -17,6 +17,10 @@ class EDIBuilderTest {
     EDIBuilder edi = new EDIBuilder()
 
     edi.UNB {
+      data {
+        ["UNOB", 1] + ["gslg071", "ZZ"] + ["gcms003", "ZZ"] + [101013, 1129] + 1013115727000 + "" + "CLSVAL"
+      }
+
       UNG {
 
         UNH {
@@ -58,7 +62,7 @@ class EDIBuilderTest {
 
     def expectedEDI = '''\
       UNA:+.? '
-      UNB'
+      UNB+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'
       UNG'
       UNH'
       CS0+SSS:SARG:+12222+3666'

@@ -27,7 +27,7 @@ class UNGSegment extends AbstractSegment {
     assert interchangeMessage
 
     StringBuilder sb = new StringBuilder()
-    sb << tagName << interchangeMessage.segmentTerminator << interchangeMessage.eol
+    sb << tagName << ediString << interchangeMessage.segmentTerminator << interchangeMessage.eol
     return sb.toString()
   }
 

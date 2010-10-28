@@ -10,17 +10,17 @@ import info.sargis.gedi.model.unb.UNZSegment
  * User: Sargis Harutyunyan
  * Date: Oct 25, 2010
  */
-class InterchangePayload implements Segment {
+class InterchangePayload extends AbstractSegment {
 
   private List<FunctionalGroupPayload> functionalSegments = []
 
-  EDIInterchangeMessage ediMessage
+  EDIInterchangeMessage interchangeMessage
 
   def InterchangePayload() {
   }
 
-  def InterchangePayload(EDIInterchangeMessage ediMessage) {
-    this.ediMessage = ediMessage
+  def InterchangePayload(EDIInterchangeMessage interchangeMessage) {
+    this.interchangeMessage = interchangeMessage
   }
 
   def addFunctionalSegment(FunctionalGroupPayload functionalSegment) {
@@ -32,7 +32,7 @@ class InterchangePayload implements Segment {
   }
 
   String toEDI() {
-    assert ediMessage
+    assert interchangeMessage
     assert functionalSegments
 
     StringBuilder sb = new StringBuilder()
@@ -48,14 +48,14 @@ class InterchangePayload implements Segment {
   }
 
   private UNBSegment getUNBSegment() {
-    return new UNBSegment(ediMessage)
+    return new UNBSegment(interchangeMessage: interchangeMessage, ediString: ediString)
   }
 
   private UNZSegment getUnzSegment(UNBSegment unbSegment) {
     UNZSegment unzSegment = new UNZSegment(
             msgCount: getMessageCount(), ctrlRef: unbSegment.msgRefNbr
     )
-    unzSegment.interchangeMessage = ediMessage
+    unzSegment.interchangeMessage = interchangeMessage
 
     return unzSegment
   }
