@@ -49,7 +49,7 @@ class FunctionalGroupPayload extends AbstractSegment {
   }
 
   private UNGSegment getUngSegment() {
-    return new UNGSegment(interchangeMessage: interchangeMessage, ediString: ediString)
+    return new UNGSegment(interchangeMessage: interchangeMessage, ediDataString: ediDataString)
   }
 
   private UNESegment getUneSegment(UNGSegment ungSegment) {

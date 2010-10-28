@@ -12,7 +12,8 @@ import info.sargis.gedi.EDIDSLCategory
 abstract class AbstractSegment implements Segment {
 
   String tagName = ""
-  String ediString = ""
+  String tagData = ""
+  String ediDataString = ""
 
   InterchangeMessage interchangeMessage
 
@@ -25,7 +26,7 @@ abstract class AbstractSegment implements Segment {
 
   def data(Closure closure) {
     use(EDIDSLCategory) {
-      ediString = closure.call()
+      ediDataString = closure.call()
     }
   }
 
@@ -34,7 +35,7 @@ abstract class AbstractSegment implements Segment {
 
     StringBuilder sb = new StringBuilder()
 
-    sb << tagName << interchangeMessage.dataElemSeparator << ediString
+    sb << tagName << interchangeMessage.dataElemSeparator << ediDataString
     sb << interchangeMessage.segmentTerminator << interchangeMessage.eol
 
     return sb.toString();

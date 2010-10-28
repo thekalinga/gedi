@@ -27,7 +27,7 @@ class UNBSegment extends AbstractSegment {
     assert interchangeMessage
 
     StringBuilder sb = new StringBuilder()
-    sb << tagName << interchangeMessage.dataElemSeparator << ediString << interchangeMessage.segmentTerminator << interchangeMessage.eol
+    sb << tagName << interchangeMessage.dataElemSeparator << ediDataString << interchangeMessage.segmentTerminator << interchangeMessage.eol
     return sb.toString()
   }
 

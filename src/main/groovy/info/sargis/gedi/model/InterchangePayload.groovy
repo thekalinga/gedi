@@ -48,7 +48,7 @@ class InterchangePayload extends AbstractSegment {
   }
 
   private UNBSegment getUNBSegment() {
-    return new UNBSegment(interchangeMessage: interchangeMessage, ediString: ediString)
+    return new UNBSegment(interchangeMessage: interchangeMessage, ediDataString: ediDataString)
   }
 
   private UNZSegment getUnzSegment(UNBSegment unbSegment) {

@@ -47,7 +47,7 @@ class MessagePayload extends AbstractSegment {
   }
 
   UNHSegment getUnhSegment() {
-    return new UNHSegment(interchangeMessage: interchangeMessage, ediString: ediString)
+    return new UNHSegment(interchangeMessage: interchangeMessage, ediDataString: ediDataString)
   }
 
   UNTSegment getUntSegment(UNHSegment unhSegment) {
