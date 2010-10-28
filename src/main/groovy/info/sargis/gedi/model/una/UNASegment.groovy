@@ -1,7 +1,7 @@
 package info.sargis.gedi.model.una
 
-import info.sargis.gedi.EDISegment
 import info.sargis.gedi.model.InterchangeMessage
+import info.sargis.gedi.model.seg.EDISegment
 
 /**
  * Copyrights 2002-2010 Webb Fontaine

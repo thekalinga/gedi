@@ -1,5 +1,6 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.model.seg.UserSegment
 import org.testng.Assert
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test

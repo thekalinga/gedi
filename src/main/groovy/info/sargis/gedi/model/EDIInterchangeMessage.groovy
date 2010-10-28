@@ -1,6 +1,7 @@
 package info.sargis.gedi.model
 
 import info.sargis.gedi.EDIBuilderException
+import info.sargis.gedi.model.seg.UserSegment
 import info.sargis.gedi.model.una.UNASegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

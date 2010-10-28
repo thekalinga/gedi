@@ -1,5 +1,6 @@
 package info.sargis.gedi
 
+import info.sargis.gedi.model.seg.DataSupportSegment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import info.sargis.gedi.model.*

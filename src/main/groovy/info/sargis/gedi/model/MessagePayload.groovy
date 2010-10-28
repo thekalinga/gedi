@@ -1,5 +1,7 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.model.seg.DataSupportSegment
+import info.sargis.gedi.model.seg.UserSegment
 import info.sargis.gedi.model.unh.UNHSegment
 import info.sargis.gedi.model.unh.UNTSegment
 

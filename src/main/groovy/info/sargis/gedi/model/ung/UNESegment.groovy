@@ -1,7 +1,7 @@
 package info.sargis.gedi.model.ung
 
-import info.sargis.gedi.EDISegment
 import info.sargis.gedi.model.InterchangeMessage
+import info.sargis.gedi.model.seg.EDISegment
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -15,9 +15,8 @@ class UNESegment extends EDISegment {
   Integer msgCount
   String grpRefNbr
 
-  String tagName = "UNE"
-
   def UNESegment() {
+    tagName = "UNE"
   }
 
   def UNESegment(InterchangeMessage interchangeMessage) {
@@ -25,13 +24,7 @@ class UNESegment extends EDISegment {
   }
 
   String toEDI() {
-    assert interchangeMessage
-
-    StringBuilder sb = new StringBuilder()
-
-    sb << tagName << interchangeMessage.dataElemSeparator << msgCount << interchangeMessage.dataElemSeparator
-    sb << grpRefNbr << interchangeMessage.segmentTerminator << interchangeMessage.eol
-
-    return sb.toString()
+    ediDataString = msgCount + interchangeMessage.dataElemSeparator + grpRefNbr
+    return super.toEDI()
   }
 }

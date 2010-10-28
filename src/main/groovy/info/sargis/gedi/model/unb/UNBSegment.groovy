@@ -1,7 +1,7 @@
 package info.sargis.gedi.model.unb
 
-import info.sargis.gedi.EDISegment
 import info.sargis.gedi.model.InterchangeMessage
+import info.sargis.gedi.model.seg.EDISegment
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -14,21 +14,12 @@ class UNBSegment extends EDISegment {
 
   String msgRefNbr = "UNB0111DUMMY"
 
-  String tagName = "UNB"
-
   def UNBSegment() {
+    tagName = "UNB"
   }
 
   def UNBSegment(InterchangeMessage interchangeMessage) {
     super(interchangeMessage);
-  }
-
-  String toEDI() {
-    assert interchangeMessage
-
-    StringBuilder sb = new StringBuilder()
-    sb << tagName << interchangeMessage.dataElemSeparator << ediDataString << interchangeMessage.segmentTerminator << interchangeMessage.eol
-    return sb.toString()
   }
 
 }

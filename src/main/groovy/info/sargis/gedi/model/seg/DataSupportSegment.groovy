@@ -1,6 +1,7 @@
-package info.sargis.gedi.model
+package info.sargis.gedi.model.seg
 
 import info.sargis.gedi.EDIDSLCategory
+import info.sargis.gedi.model.Segment
 
 /**
  * Copyrights 2002-2010 Webb Fontaine

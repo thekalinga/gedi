@@ -1,5 +1,7 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.model.seg.UserSegment
+
 /**
  * Copyrights 2002-2010 Webb Fontaine
  * This software is the proprietary information of Webb Fontaine.

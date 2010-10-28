@@ -1,6 +1,5 @@
-package info.sargis.gedi
+package info.sargis.gedi.model.seg
 
-import info.sargis.gedi.model.DataSupportSegment
 import info.sargis.gedi.model.InterchangeMessage
 
 /**
