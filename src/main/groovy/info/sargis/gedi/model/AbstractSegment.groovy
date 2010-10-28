@@ -31,6 +31,7 @@ abstract class AbstractSegment implements Segment {
 
   String toEDI() {
     assert interchangeMessage
+
     StringBuilder sb = new StringBuilder()
 
     sb << tagName << interchangeMessage.dataElemSeparator << ediString

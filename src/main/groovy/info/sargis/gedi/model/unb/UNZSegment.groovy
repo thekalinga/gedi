@@ -26,6 +26,12 @@ class UNZSegment extends AbstractSegment {
 
   String toEDI() {
     assert interchangeMessage
-    return "${tagName}+${msgCount}+${ctrlRef}${interchangeMessage.segmentTerminator}${interchangeMessage.eol}"
+
+    StringBuilder sb = new StringBuilder()
+
+    sb << tagName << interchangeMessage.dataElemSeparator << msgCount << interchangeMessage.dataElemSeparator
+    sb << ctrlRef << interchangeMessage.segmentTerminator << interchangeMessage.eol
+
+    return sb.toString()
   }
 }
