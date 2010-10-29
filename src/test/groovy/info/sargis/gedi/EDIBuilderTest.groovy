@@ -176,4 +176,55 @@ class EDIBuilderTest {
     Assert.assertEquals(sw.toString(), expectedEDI.stripIndent())
   }
 
+  @Test(expectedExceptions = EDIBuilderException.class)
+  public void testToEDIMixingUngAndUnhSegments() throws Exception {
+
+    edi.UNB {
+      data {
+        ["UNOB", 1] + ["gslg071", "ZZ"] + ["gcms003", "ZZ"] + [101013, 1129] + 1013115727000 + "" + "CLSVAL"
+      }
+
+      UNG {
+        data {
+          "FCVRGR" + "sargis" + "valuewebb" + [101028, 1451] + "CTRLREF"
+        }
+      }
+
+      UNH {
+        data {
+          "001" + ["CLSVAL", 1, 1000, "MN"]
+        }
+      }
+    }
+
+    StringWriter sw = new StringWriter()
+    edi.build(sw)
+  }
+
+  @Test(expectedExceptions = EDIBuilderException.class)
+  public void testToEDIMixingUnhAndUngSegments() throws Exception {
+
+    edi.UNB {
+      data {
+        ["UNOB", 1] + ["gslg071", "ZZ"] + ["gcms003", "ZZ"] + [101013, 1129] + 1013115727000 + "" + "CLSVAL"
+      }
+
+      UNH {
+        data {
+          "001" + ["CLSVAL", 1, 1000, "MN"]
+        }
+      }
+
+      UNG {
+        data {
+          "FCVRGR" + "sargis" + "valuewebb" + [101028, 1451] + "CTRLREF"
+        }
+      }
+
+    }
+
+    StringWriter sw = new StringWriter()
+    edi.build(sw)
+  }
+
 }
