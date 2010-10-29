@@ -1,6 +1,7 @@
 package info.sargis.gedi.parser;
 
 import info.sargis.gedi.model.una.UNASegment;
+import info.sargis.gedi.utils.Utils;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -18,9 +19,11 @@ import java.util.Scanner;
 class EDIReader implements XMLReader, Parser {
 
     private static final String EMPTY_URI = "";
-    private static final String EMPTY_QNAME = "";
     private static final AttributesImpl EMPTY_ATTS = new AttributesImpl();
-    private static final String ELEMENT = "ELEM";
+
+    public static final String EDI = "EDI";
+    public static final String DS = "DS";
+    public static final String DE = "DE";
 
     private UNASegment unaSegment;
     private ContentHandler contentHandler;
@@ -102,6 +105,8 @@ class EDIReader implements XMLReader, Parser {
 
     @Override
     public void parse(InputSource input) throws IOException, SAXException {
+        Utils.checkNotNull(contentHandler);
+
         String segmentSplitPattern = createSegmentSplitPattern(unaSegment);
 
         Scanner scanner = new Scanner(input.getCharacterStream());
@@ -117,12 +122,12 @@ class EDIReader implements XMLReader, Parser {
     }
 
     private void doScan(Scanner scanner) throws SAXException {
-        contentHandler.startElement(EMPTY_URI, "EDI", EMPTY_QNAME, EMPTY_ATTS);
+        contentHandler.startElement(EMPTY_URI, EDI, EDI, EMPTY_ATTS);
         while (scanner.hasNext()) {
             String segment = scanner.next().trim();
             parseSegment(segment);
         }
-        contentHandler.endElement(EMPTY_URI, "EDI", EMPTY_QNAME);
+        contentHandler.endElement(EMPTY_URI, EDI, EDI);
     }
 
     private void parseSegment(String segment) throws SAXException {
@@ -130,52 +135,51 @@ class EDIReader implements XMLReader, Parser {
         String[] simpleDataElements = segment.split(dataElemSplitPattern);
 
         String tag = simpleDataElements[0]; //TODO: tag with attributes see draft doc
-        contentHandler.startElement(EMPTY_URI, tag, EMPTY_QNAME, EMPTY_ATTS);
+        contentHandler.startElement(EMPTY_URI, tag, tag, EMPTY_ATTS);
 
         for (int index = 1; index < simpleDataElements.length; index++) {
             String simpleDataElement = simpleDataElements[index];
-            parseDataElements(simpleDataElement, index + 1);
+            parseDataElements(simpleDataElement);
         }
 
-        contentHandler.endElement(EMPTY_URI, tag, EMPTY_QNAME);
+        contentHandler.endElement(EMPTY_URI, tag, tag);
     }
 
 
-    private void parseDataElements(String dataElement, int elemTagNbr) throws SAXException {
+    private void parseDataElements(String dataElement) throws SAXException {
         String compositeDataElemSplitPattern = createCompositeDataElemSplitPattern(unaSegment);
 
         String[] compositeElements = dataElement.split(compositeDataElemSplitPattern);
 
         if (isCompositeData(compositeElements)) {
-            processCompositeElements(compositeElements, elemTagNbr);
+            processCompositeElements(compositeElements);
         } else {
-            processSimpleElement(compositeElements[0], elemTagNbr);
+            processSimpleElement(compositeElements[0]);
         }
     }
 
-    private void processCompositeElements(String[] compositeElements, int elemTagNbr) throws SAXException {
-        contentHandler.startElement(EMPTY_URI, ELEMENT + elemTagNbr, EMPTY_QNAME, EMPTY_ATTS);
+    private void processCompositeElements(String[] compositeElements) throws SAXException {
+        contentHandler.startElement(EMPTY_URI, DS, DS, EMPTY_ATTS);
 
         for (int index = 0; index < compositeElements.length; index++) {
             String compositeElement = compositeElements[index];
             char[] chars = compositeElement.toCharArray();
 
-            int nestedElemTagNbr = index + 1;
-            contentHandler.startElement(EMPTY_URI, ELEMENT + nestedElemTagNbr, EMPTY_QNAME, EMPTY_ATTS);
+            contentHandler.startElement(EMPTY_URI, DE, DE, EMPTY_ATTS);
             contentHandler.characters(chars, 0, chars.length);
-            contentHandler.endElement(EMPTY_URI, ELEMENT + nestedElemTagNbr, EMPTY_QNAME);
+            contentHandler.endElement(EMPTY_URI, DE, DE);
         }
 
-        contentHandler.endElement(EMPTY_URI, ELEMENT + elemTagNbr, EMPTY_QNAME);
+        contentHandler.endElement(EMPTY_URI, DS, DS);
     }
 
-    private void processSimpleElement(String compositeElement, int elemTagNbr) throws SAXException {
-        contentHandler.startElement(EMPTY_URI, ELEMENT + elemTagNbr, EMPTY_QNAME, EMPTY_ATTS);
+    private void processSimpleElement(String compositeElement) throws SAXException {
+        contentHandler.startElement(EMPTY_URI, DE, DE, EMPTY_ATTS);
 
         char[] chars = compositeElement.toCharArray();
         contentHandler.characters(chars, 0, chars.length);
 
-        contentHandler.endElement(EMPTY_URI, ELEMENT + elemTagNbr, EMPTY_QNAME);
+        contentHandler.endElement(EMPTY_URI, DE, DE);
     }
 
     private boolean isCompositeData(String[] compositeElements) {
