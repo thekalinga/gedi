@@ -1,5 +1,6 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.EDIBuilderException
 import info.sargis.gedi.model.seg.DataSupportSegment
 import info.sargis.gedi.model.unb.UNBSegment
 import info.sargis.gedi.model.unb.UNZSegment
@@ -26,6 +27,7 @@ class InterchangePayload extends DataSupportSegment {
   }
 
   def addFunctionalPayload(FunctionalGroupPayload functionalPayload) {
+    payloadsShouldBeEmpty(messagePayloads)
     functionalPayloads << functionalPayload
   }
 
@@ -34,6 +36,7 @@ class InterchangePayload extends DataSupportSegment {
   }
 
   def addMessagePayload(MessagePayload messagePayload) {
+    payloadsShouldBeEmpty(functionalPayloads)
     messagePayloads << messagePayload
   }
 
@@ -48,11 +51,13 @@ class InterchangePayload extends DataSupportSegment {
 
     UNBSegment unbSegment = getUNBSegment()
     sb << unbSegment.toEDI()
-    getPayloads().each { seg ->
+
+    List payloads = getPayloadsWithAssertion()
+    payloads.each { Segment seg ->
       sb << seg.toEDI()
     }
-    sb << getUnzSegment(unbSegment).toEDI()
 
+    sb << getUnzSegment(unbSegment).toEDI()
     return sb.toString()
   }
 
@@ -69,6 +74,12 @@ class InterchangePayload extends DataSupportSegment {
     return unzSegment
   }
 
+  private List getPayloadsWithAssertion() {
+    List payloads = getPayloads()
+    assert payloads
+    return payloads
+  }
+
   private List getPayloads() {
     if (functionalPayloads) {
       return functionalPayloads
@@ -78,6 +89,12 @@ class InterchangePayload extends DataSupportSegment {
 
   private int getMessageCount() {
     return getPayloads().size()
+  }
+
+  private def payloadsShouldBeEmpty(List payloads) {
+    if (payloads) {
+      throw new EDIBuilderException("Cannot mix same level UNG and UNH segments in InterchangePayload")
+    }
   }
 
 }

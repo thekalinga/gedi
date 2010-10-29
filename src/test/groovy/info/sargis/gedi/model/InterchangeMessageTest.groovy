@@ -1,5 +1,6 @@
 package info.sargis.gedi.model
 
+import info.sargis.gedi.EDIBuilderException
 import org.testng.Assert
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -72,6 +73,26 @@ class InterchangeMessageTest {
     interchangePayload.addMessagePayload(createSecondMessageSegment())
 
     Assert.assertEquals(interchangePayload.toEDI(), expectedEDI.stripIndent());
+  }
+
+  @Test(expectedExceptions = EDIBuilderException.class)
+  public void testMixingUngAndUnhSegments() throws Exception {
+    InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
+
+    interchangePayload.addFunctionalPayload(createFirstFunctionalMessage())
+    interchangePayload.addFunctionalPayload(createSecondFunctionalMessage())
+
+    interchangePayload.addMessagePayload(createFirstMessageSegment())
+  }
+
+  @Test(expectedExceptions = EDIBuilderException.class)
+  public void testMixingUnhAndUngSegments() throws Exception {
+    InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
+
+    interchangePayload.addMessagePayload(createFirstMessageSegment())
+    interchangePayload.addMessagePayload(createSecondMessageSegment())
+
+    interchangePayload.addFunctionalPayload(createFirstFunctionalMessage())
   }
 
   private FunctionalGroupPayload createFirstFunctionalMessage() {
