@@ -1,0 +1,23 @@
+UNB:1:2+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'
+
+<UNB att1 = "1", att2 = "2" >
+    <ELEM1>
+        <ELEM1>UNOB</ELEM1>
+        <ELEM2>1</ELEM2>
+    </ELEM1>
+    <ELEM2>
+        <ELEM1>gslg071</ELEM1>
+        <ELEM2>ZZ</ELEM2>
+    </ELEM2>
+    <ELEM2>
+        <ELEM1>gcms003</ELEM1>
+        <ELEM2>ZZ</ELEM2>
+    </ELEM2>
+    <ELEM3>
+        <ELEM1>101013</ELEM1>
+        <ELEM2>101013</ELEM2>
+    </ELEM3>
+    <ELEM4>1013115727000</ELEM4>
+    <ELEM5></ELEM5>
+    <ELEM6>CLSVAL</ELEM6> 
+</UNB>
