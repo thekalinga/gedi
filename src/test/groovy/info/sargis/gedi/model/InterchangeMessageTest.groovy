@@ -43,8 +43,8 @@ class InterchangeMessageTest {
 
     InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
 
-    interchangePayload.addFunctionalSegment(createFirstFunctionalMessage())
-    interchangePayload.addFunctionalSegment(createSecondFunctionalMessage())
+    interchangePayload.addFunctionalPayload(createFirstFunctionalMessage())
+    interchangePayload.addFunctionalPayload(createSecondFunctionalMessage())
 
     Assert.assertEquals(interchangePayload.toEDI(), expectedEDI.stripIndent());
   }
@@ -72,7 +72,7 @@ class InterchangeMessageTest {
     functionalSegment.addMessageSegment(createFirstMessageSegment())
     functionalSegment.addMessageSegment(createSecondMessageSegment())
 
-    interchangePayload.addFunctionalSegment(functionalSegment)
+    interchangePayload.addFunctionalPayload(functionalSegment)
 
     Assert.assertEquals(interchangePayload.toEDI(), expectedEDI.stripIndent());
   }
