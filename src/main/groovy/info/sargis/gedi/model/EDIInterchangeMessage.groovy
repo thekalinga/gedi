@@ -81,10 +81,6 @@ class EDIInterchangeMessage implements Segment, InterchangeMessage {
     return new FunctionalGroupPayload(this)
   }
 
-  def ConditionalFunctionalGroupPayload createConditionalFunctionalPayload() {
-    return new ConditionalFunctionalGroupPayload(this);
-  }
-
   MessagePayload createMessagePayload() {
     return new MessagePayload(this)
   }

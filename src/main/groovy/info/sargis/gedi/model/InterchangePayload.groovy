@@ -14,6 +14,7 @@ import info.sargis.gedi.model.unb.UNZSegment
 class InterchangePayload extends DataSupportSegment {
 
   private List<FunctionalGroupPayload> functionalPayloads = []
+  private List<MessagePayload> messagePayloads = []
 
   EDIInterchangeMessage interchangeMessage
 
@@ -32,15 +33,22 @@ class InterchangePayload extends DataSupportSegment {
     return Collections.unmodifiableList(functionalPayloads)
   }
 
+  def addMessagePayload(MessagePayload messagePayload) {
+    messagePayloads << messagePayload
+  }
+
+  List<MessagePayload> getMessagePayloads() {
+    return Collections.unmodifiableList(messagePayloads)
+  }
+
   String toEDI() {
     assert interchangeMessage
-    assert functionalPayloads
 
     StringBuilder sb = new StringBuilder()
 
     UNBSegment unbSegment = getUNBSegment()
     sb << unbSegment.toEDI()
-    functionalPayloads.each { seg ->
+    getPayloads().each { seg ->
       sb << seg.toEDI()
     }
     sb << getUnzSegment(unbSegment).toEDI()
@@ -61,14 +69,15 @@ class InterchangePayload extends DataSupportSegment {
     return unzSegment
   }
 
-  private int getMessageCount() {
-    assert functionalPayloads
-
-    if (functionalPayloads[0] instanceof ConditionalFunctionalGroupPayload) {
-      return functionalPayloads[0].getMessageSegments().size()
+  private List getPayloads() {
+    if (functionalPayloads) {
+      return functionalPayloads
     }
-    return functionalPayloads.size()
+    return messagePayloads
+  }
 
+  private int getMessageCount() {
+    return getPayloads().size()
   }
 
 }

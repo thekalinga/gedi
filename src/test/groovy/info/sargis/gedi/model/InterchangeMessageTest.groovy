@@ -68,25 +68,22 @@ class InterchangeMessageTest {
 
     InterchangePayload interchangePayload = interchangeMessage.createInterchangePayload()
 
-    FunctionalGroupPayload functionalSegment = interchangeMessage.createConditionalFunctionalPayload()
-    functionalSegment.addMessageSegment(createFirstMessageSegment())
-    functionalSegment.addMessageSegment(createSecondMessageSegment())
-
-    interchangePayload.addFunctionalPayload(functionalSegment)
+    interchangePayload.addMessagePayload(createFirstMessageSegment())
+    interchangePayload.addMessagePayload(createSecondMessageSegment())
 
     Assert.assertEquals(interchangePayload.toEDI(), expectedEDI.stripIndent());
   }
 
   private FunctionalGroupPayload createFirstFunctionalMessage() {
     FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalPayload()
-    functionalSegment.addMessageSegment(createFirstMessageSegment())
+    functionalSegment.addMessagePayload(createFirstMessageSegment())
 
     return functionalSegment
   }
 
   private FunctionalGroupPayload createSecondFunctionalMessage() {
     FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalPayload()
-    functionalSegment.addMessageSegment(createSecondMessageSegment())
+    functionalSegment.addMessagePayload(createSecondMessageSegment())
 
     return functionalSegment
   }

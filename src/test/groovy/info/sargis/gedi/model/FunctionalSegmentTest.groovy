@@ -26,8 +26,8 @@ class FunctionalSegmentTest {
 
     FunctionalGroupPayload functionalSegment = interchangeMessage.createFunctionalPayload()
 
-    functionalSegment.addMessageSegment(createFirstMessageSegment())
-    functionalSegment.addMessageSegment(createSecondMessageSegment())
+    functionalSegment.addMessagePayload(createFirstMessageSegment())
+    functionalSegment.addMessagePayload(createSecondMessageSegment())
 
     def expectedEDI = '''\
       UNG+'

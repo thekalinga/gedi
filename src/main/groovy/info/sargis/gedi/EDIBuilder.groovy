@@ -51,15 +51,9 @@ class EDIBuilder extends BuilderSupport {
       case MessagePayload:
 
         if (parent instanceof InterchangePayload) {
-          InterchangePayload iMessage = (InterchangePayload) parent
-
-          def segments = iMessage.getFunctionalPayloads()
-          if (!segments) {
-            parent.addFunctionalPayload(ediMessage.createConditionalFunctionalPayload())
-          }
-          segments[0].addMessageSegment(child)
+          parent.addMessagePayload(child)
         } else if (parent instanceof FunctionalGroupPayload) {
-          parent.addMessageSegment(child)
+          parent.addMessagePayload(child)
         } else {
           throw new EDIBuilderException("UNH segment can be added only to UNB or UNG segments");
         }

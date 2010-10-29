@@ -28,8 +28,6 @@ public interface InterchangeMessage {
 
   FunctionalGroupPayload createFunctionalPayload()
 
-  ConditionalFunctionalGroupPayload createConditionalFunctionalPayload()
-
   MessagePayload createMessagePayload()
 
   UserSegment createUserSegment(String tagName)

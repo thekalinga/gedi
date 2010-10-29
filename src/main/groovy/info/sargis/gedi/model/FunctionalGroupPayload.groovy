@@ -13,7 +13,7 @@ import info.sargis.gedi.model.ung.UNGSegment
  */
 class FunctionalGroupPayload extends DataSupportSegment {
 
-  private List<MessagePayload> messageSegments = []
+  private List<MessagePayload> messagePayloads = []
 
   EDIInterchangeMessage interchangeMessage
 
@@ -24,24 +24,24 @@ class FunctionalGroupPayload extends DataSupportSegment {
     this.interchangeMessage = interchangeMessage
   }
 
-  def addMessageSegment(MessagePayload messageSegment) {
+  def addMessagePayload(MessagePayload messageSegment) {
     messageSegment.interchangeMessage = interchangeMessage
-    messageSegments << messageSegment
+    messagePayloads << messageSegment
   }
 
-  List<MessagePayload> getMessageSegments() {
-    return Collections.unmodifiableList(messageSegments)
+  List<MessagePayload> getMessagePayloads() {
+    return Collections.unmodifiableList(messagePayloads)
   }
 
   String toEDI() {
     assert interchangeMessage
-    assert messageSegments
+    assert messagePayloads
 
     StringBuilder sb = new StringBuilder()
 
     UNGSegment ungSegment = getUngSegment()
     sb << ungSegment.toEDI()
-    messageSegments.each { seg ->
+    messagePayloads.each { seg ->
       sb << seg.toEDI()
     }
     sb << getUneSegment(ungSegment).toEDI()
@@ -55,7 +55,7 @@ class FunctionalGroupPayload extends DataSupportSegment {
 
   private UNESegment getUneSegment(UNGSegment ungSegment) {
     UNESegment uneSegment = new UNESegment(
-            msgCount: messageSegments.size(), grpRefNbr: ungSegment.msgRefNbr
+            msgCount: messagePayloads.size(), grpRefNbr: ungSegment.msgRefNbr
     )
     uneSegment.interchangeMessage = interchangeMessage
 
