@@ -27,7 +27,6 @@ class EDIInterchangeMessage implements Segment, InterchangeMessage {
   }
 
   def EDIInterchangeMessage(UNASegment unaSegment) {
-    unaSegment.interchangeMessage = this
     this.unaSegment = unaSegment
   }
 
@@ -40,7 +39,7 @@ class EDIInterchangeMessage implements Segment, InterchangeMessage {
     assert interchangePayload
 
     StringBuilder stringBuilder = new StringBuilder()
-    stringBuilder << unaSegment.toEDI() << interchangePayload.toEDI()
+    stringBuilder << unaSegment.toEDI() << EOL << interchangePayload.toEDI()
     return stringBuilder.toString()
   }
 

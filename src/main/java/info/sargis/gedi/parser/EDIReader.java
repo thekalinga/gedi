@@ -2,10 +2,13 @@ package info.sargis.gedi.parser;
 
 import info.sargis.gedi.model.una.UNASegment;
 import info.sargis.gedi.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.IOException;
+import java.io.PushbackReader;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -16,32 +19,30 @@ import java.util.Scanner;
  * User: Sargis Harutyunyan
  * Date: Oct 29, 2010
  */
-class EDIReader implements XMLReader, Parser {
+public class EDIReader implements XMLReader, Parser {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EDIReader.class);
+
+    public static final UNASegment DEFAULT_UNA = new UNASegment();
+    private static final int UNA_TAG_SIZE = 3;
 
     private static final String EMPTY_URI = "";
     private static final AttributesImpl EMPTY_ATTS = new AttributesImpl();
-
     public static final String EDI = "EDI";
     public static final String DS = "DS";
     public static final String DE = "DE";
 
     private final EDIReaderHelper ediReaderHelper = new EDIReaderHelper();
 
-    private UNASegment unaSegment;
     private ContentHandler contentHandler;
     private ErrorHandler errorHandler;
 
-    public UNASegment getUnaSegment() {
-        return unaSegment;
-    }
-
-    public void setUnaSegment(UNASegment unaSegment) {
-        this.unaSegment = unaSegment;
+    public EDIReader() {
     }
 
     @Override
     public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-        return false;
+        throw new SAXNotRecognizedException();
     }
 
     @Override
@@ -109,13 +110,17 @@ class EDIReader implements XMLReader, Parser {
     public void parse(InputSource input) throws IOException, SAXException {
         Utils.checkNotNull(contentHandler);
 
+        PushbackReader reader = new PushbackReader(input.getCharacterStream(), UNA_TAG_SIZE);
+        UNASegment unaSegment = readUNASegment(reader);
+        LOGGER.debug("Dumping UNA Segment: {}", unaSegment);
+
         String segmentSplitPattern = ediReaderHelper.createSegmentSplitPattern(unaSegment);
 
-        Scanner scanner = new Scanner(input.getCharacterStream());
+        Scanner scanner = new Scanner(reader);
         scanner.useDelimiter(segmentSplitPattern);
 
         contentHandler.startDocument();
-        doScan(scanner);
+        doScan(scanner, unaSegment);
         contentHandler.endDocument();
 
         if (scanner.ioException() != null) {
@@ -123,16 +128,43 @@ class EDIReader implements XMLReader, Parser {
         }
     }
 
-    private void doScan(Scanner scanner) throws SAXException {
+    private UNASegment readUNASegment(PushbackReader reader) throws IOException {
+        try {
+            char[] unaChars = new char[UNA_TAG_SIZE];
+            reader.read(unaChars);
+
+            if ("UNA".equals(new String(unaChars))) {
+                LOGGER.debug("Found UNA Segment in EDI Interchange....");
+                UNASegment unaSegment = new UNASegment();
+
+                unaSegment.setDataElemSeparator((char) reader.read());
+                unaSegment.setDecimalNotation((char) reader.read());
+                unaSegment.setReleaseIndicator((char) reader.read());
+                unaSegment.setReserved(' ');
+                unaSegment.setSegmentTerminator((char) reader.read());
+
+                return unaSegment;
+            } else {
+                LOGGER.debug("NotFound UNA Segment in EDI Interchange, switch to default....");
+                reader.unread(unaChars);
+                return DEFAULT_UNA;
+            }
+
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+
+    private void doScan(Scanner scanner, UNASegment unaSegment) throws SAXException {
         contentHandler.startElement(EMPTY_URI, EDI, EDI, EMPTY_ATTS);
         while (scanner.hasNext()) {
-            String segment = scanner.next().trim();
-            parseSegment(segment);
+            String segmentEDI = scanner.next().trim();
+            parseSegment(segmentEDI, unaSegment);
         }
         contentHandler.endElement(EMPTY_URI, EDI, EDI);
     }
 
-    private void parseSegment(String segment) throws SAXException {
+    private void parseSegment(String segment, UNASegment unaSegment) throws SAXException {
         String dataElemSplitPattern = ediReaderHelper.createDataElemSplitPattern(unaSegment);
         String[] simpleDataElements = segment.split(dataElemSplitPattern);
 
@@ -140,15 +172,15 @@ class EDIReader implements XMLReader, Parser {
         contentHandler.startElement(EMPTY_URI, tag, tag, EMPTY_ATTS);
 
         for (int index = 1; index < simpleDataElements.length; index++) {
-            String simpleDataElement = simpleDataElements[index];
-            parseDataElements(simpleDataElement);
+            String dataElementEDI = simpleDataElements[index];
+            parseDataElements(dataElementEDI, unaSegment);
         }
 
         contentHandler.endElement(EMPTY_URI, tag, tag);
     }
 
 
-    private void parseDataElements(String dataElement) throws SAXException {
+    private void parseDataElements(String dataElement, UNASegment unaSegment) throws SAXException {
         String compositeDataElemSplitPattern = ediReaderHelper.createCompositeDataElemSplitPattern(unaSegment);
 
         String[] compositeElements = dataElement.split(compositeDataElemSplitPattern);
@@ -164,8 +196,8 @@ class EDIReader implements XMLReader, Parser {
         contentHandler.startElement(EMPTY_URI, DS, DS, EMPTY_ATTS);
 
         for (int index = 0; index < compositeElements.length; index++) {
-            String compositeElement = compositeElements[index];
-            char[] chars = compositeElement.toCharArray();
+            String compositeElementEDI = compositeElements[index];
+            char[] chars = compositeElementEDI.toCharArray();
 
             contentHandler.startElement(EMPTY_URI, DE, DE, EMPTY_ATTS);
             contentHandler.characters(chars, 0, chars.length);

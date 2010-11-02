@@ -1,7 +1,6 @@
 package info.sargis.gedi.model.una
 
-import info.sargis.gedi.model.InterchangeMessage
-import info.sargis.gedi.model.seg.EDISegment
+import info.sargis.gedi.model.Segment
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -10,7 +9,7 @@ import info.sargis.gedi.model.seg.EDISegment
  * User: Sargis Harutyunyan
  * Date: Oct 21, 2010
  */
-class UNASegment extends EDISegment {
+class UNASegment implements Segment {
 
   char compDataSep = ':' as char
   char dataElemSeparator = '+' as char
@@ -24,17 +23,25 @@ class UNASegment extends EDISegment {
   def UNASegment() {
   }
 
-  def UNASegment(InterchangeMessage interchangeMessage) {
-    super(interchangeMessage)
-  }
-
   String toEDI() {
     StringBuilder sb = new StringBuilder(tagName)
 
     sb << compDataSep << dataElemSeparator << decimalNotation << releaseIndicator
-    sb << reserved << segmentTerminator << interchangeMessage.eol
+    sb << reserved << segmentTerminator
 
     return sb.toString()
+  }
+
+  public String toString() {
+    return "UNASegment{" +
+            "compDataSep=" + compDataSep +
+            ", dataElemSeparator=" + dataElemSeparator +
+            ", decimalNotation=" + decimalNotation +
+            ", releaseIndicator=" + releaseIndicator +
+            ", reserved=" + reserved +
+            ", segmentTerminator=" + segmentTerminator +
+            ", tagName='" + tagName + '\'' +
+            '}';
   }
 
 }
