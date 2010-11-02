@@ -12,12 +12,12 @@ import info.sargis.gedi.model.seg.EDISegment
  */
 class UNASegment extends EDISegment {
 
-  String compDataSep = ":"
-  String dataElemSeparator = "+"
-  String decimalNotation = "."
-  String releaseIndicator = "?"
-  String reserved = " "
-  String segmentTerminator = "'"
+  char compDataSep = ':' as char
+  char dataElemSeparator = '+' as char
+  char decimalNotation = '.' as char
+  char releaseIndicator = '?' as char
+  char reserved = ' ' as char
+  char segmentTerminator = "'" as char
 
   String tagName = "UNA"
 

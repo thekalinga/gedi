@@ -1,5 +1,6 @@
 package info.sargis.gedi.parser
 
+import info.sargis.gedi.model.una.UNASegment
 import javax.xml.transform.Source
 import javax.xml.transform.Transformer
 import javax.xml.transform.TransformerFactory
@@ -28,6 +29,7 @@ class EDIParserTest {
   @BeforeMethod
   public void setUp() {
     ediReader = new EDIReader();
+    ediReader.setUnaSegment(new UNASegment())
   }
 
   @Test

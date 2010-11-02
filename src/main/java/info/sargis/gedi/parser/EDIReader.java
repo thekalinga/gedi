@@ -25,6 +25,8 @@ class EDIReader implements XMLReader, Parser {
     public static final String DS = "DS";
     public static final String DE = "DE";
 
+    private final EDIReaderHelper ediReaderHelper = new EDIReaderHelper();
+
     private UNASegment unaSegment;
     private ContentHandler contentHandler;
     private ErrorHandler errorHandler;
@@ -107,7 +109,7 @@ class EDIReader implements XMLReader, Parser {
     public void parse(InputSource input) throws IOException, SAXException {
         Utils.checkNotNull(contentHandler);
 
-        String segmentSplitPattern = createSegmentSplitPattern(unaSegment);
+        String segmentSplitPattern = ediReaderHelper.createSegmentSplitPattern(unaSegment);
 
         Scanner scanner = new Scanner(input.getCharacterStream());
         scanner.useDelimiter(segmentSplitPattern);
@@ -131,7 +133,7 @@ class EDIReader implements XMLReader, Parser {
     }
 
     private void parseSegment(String segment) throws SAXException {
-        String dataElemSplitPattern = createDataElemSplitPattern(unaSegment);
+        String dataElemSplitPattern = ediReaderHelper.createDataElemSplitPattern(unaSegment);
         String[] simpleDataElements = segment.split(dataElemSplitPattern);
 
         String tag = simpleDataElements[0]; //TODO: tag with attributes see draft doc
@@ -147,7 +149,7 @@ class EDIReader implements XMLReader, Parser {
 
 
     private void parseDataElements(String dataElement) throws SAXException {
-        String compositeDataElemSplitPattern = createCompositeDataElemSplitPattern(unaSegment);
+        String compositeDataElemSplitPattern = ediReaderHelper.createCompositeDataElemSplitPattern(unaSegment);
 
         String[] compositeElements = dataElement.split(compositeDataElemSplitPattern);
 
@@ -184,18 +186,6 @@ class EDIReader implements XMLReader, Parser {
 
     private boolean isCompositeData(String[] compositeElements) {
         return compositeElements.length > 1;
-    }
-
-    private String createSegmentSplitPattern(UNASegment unaSegment) {
-        return "(?<!\\?)'";
-    }
-
-    private String createDataElemSplitPattern(UNASegment unaSegment) {
-        return "(?<!\\?)\\+";
-    }
-
-    private String createCompositeDataElemSplitPattern(UNASegment unaSegment) {
-        return "(?<!\\?):";
     }
 
     @Override
