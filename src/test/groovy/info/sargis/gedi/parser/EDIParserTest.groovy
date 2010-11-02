@@ -23,6 +23,11 @@ import org.xml.sax.InputSource
  */
 class EDIParserTest {
 
+  private static final EDI_WITH_CUSTOM_UNA = """\
+  UNA:-.? '
+  UNB-UNOB:1-gslg071:ZZ-gcms003:ZZ-101013:1129-1013115727000--CLSVAL'
+  """
+
   private EDIReader ediReader;
 
   @BeforeMethod
@@ -31,8 +36,21 @@ class EDIParserTest {
   }
 
   @Test
-  public void testParse() throws Exception {
-    Document document = getDocument();
+  public void testUNASegmentResolving() throws Exception {
+    Document document = getDocument(EDI_WITH_CUSTOM_UNA.stripIndent());
+
+    XPathFactory factory = XPathFactory.newInstance();
+    XPath xpath = factory.newXPath();
+    XPathExpression expr = xpath.compile("/EDI/UNB/DS[4]/DE[1]/text()");
+
+    String result = expr.evaluate(document, XPathConstants.STRING);
+
+    Assert.assertEquals(result, "101013")
+  }
+
+  @Test
+  public void testXPathEvaluation() throws Exception {
+    Document document = getDocument("UNB+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'");
 
     XPathFactory factory = XPathFactory.newInstance();
     XPath xpath = factory.newXPath();
@@ -43,10 +61,10 @@ class EDIParserTest {
     Assert.assertEquals(result, "UNOB")
   }
 
-  private Document getDocument() {
+  private Document getDocument(String ediSource) {
 
     Transformer transformer = TransformerFactory.newInstance().newTransformer();
-    Source source = new SAXSource(ediReader, new InputSource(new StringReader("UNB+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'")));
+    Source source = new SAXSource(ediReader, new InputSource(new StringReader(ediSource)));
     DOMResult result = new DOMResult();
     transformer.transform(source, result);
 

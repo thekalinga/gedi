@@ -23,7 +23,6 @@ public class EDIReader implements XMLReader, Parser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EDIReader.class);
 
-    public static final UNASegment DEFAULT_UNA = new UNASegment();
     private static final int UNA_TAG_SIZE = 3;
 
     private static final String EMPTY_URI = "";
@@ -37,7 +36,14 @@ public class EDIReader implements XMLReader, Parser {
     private ContentHandler contentHandler;
     private ErrorHandler errorHandler;
 
+    private final UNASegment defaultUnaSegment;
+
     public EDIReader() {
+        this(new UNASegment());
+    }
+
+    public EDIReader(UNASegment defaultUnaSegment) {
+        this.defaultUnaSegment = defaultUnaSegment;
     }
 
     @Override
@@ -137,17 +143,18 @@ public class EDIReader implements XMLReader, Parser {
                 LOGGER.debug("Found UNA Segment in EDI Interchange....");
                 UNASegment unaSegment = new UNASegment();
 
+                unaSegment.setCompDataSep((char) reader.read());
                 unaSegment.setDataElemSeparator((char) reader.read());
                 unaSegment.setDecimalNotation((char) reader.read());
                 unaSegment.setReleaseIndicator((char) reader.read());
-                unaSegment.setReserved(' ');
+                unaSegment.setReserved((char) reader.read());
                 unaSegment.setSegmentTerminator((char) reader.read());
 
                 return unaSegment;
             } else {
                 LOGGER.debug("NotFound UNA Segment in EDI Interchange, switch to default....");
                 reader.unread(unaChars);
-                return DEFAULT_UNA;
+                return defaultUnaSegment;
             }
 
         } catch (IOException e) {
@@ -158,8 +165,10 @@ public class EDIReader implements XMLReader, Parser {
     private void doScan(Scanner scanner, UNASegment unaSegment) throws SAXException {
         contentHandler.startElement(EMPTY_URI, EDI, EDI, EMPTY_ATTS);
         while (scanner.hasNext()) {
-            String segmentEDI = scanner.next().trim();
-            parseSegment(segmentEDI, unaSegment);
+            String segmentEDI = scanner.next().trim().replaceAll("\\n", "").replaceAll("\\t", "");
+            if (!segmentEDI.isEmpty()) {
+                parseSegment(segmentEDI, unaSegment);
+            }
         }
         contentHandler.endElement(EMPTY_URI, EDI, EDI);
     }
