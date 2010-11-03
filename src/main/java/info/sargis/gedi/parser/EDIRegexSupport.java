@@ -9,9 +9,11 @@ import info.sargis.gedi.model.una.UNASegment;
  * User: Sargis Harutyunyan
  * Date: Nov 2, 2010
  */
-public class EDIReaderHelper {
+public class EDIRegexSupport {
 
     public static final char[] REGEX_META_CHARS = {'$', '^', '.', '*', '+', '?', '\\', '|', '[', ']', '(', ')', '{', '}'};
+
+    public static final EDIRegexSupport INSTANCE = new EDIRegexSupport();
 
     public String createSegmentSplitPattern(UNASegment unaSegment) {
         return String.format(

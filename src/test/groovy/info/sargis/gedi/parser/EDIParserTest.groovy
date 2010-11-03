@@ -61,6 +61,19 @@ class EDIParserTest {
     Assert.assertEquals(result, "UNOB")
   }
 
+  @Test
+  public void testXPathEvaluationForCompositeSegmentTag() throws Exception {
+    Document document = getDocument("UNB:1::3+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'");
+
+    XPathFactory factory = XPathFactory.newInstance();
+    XPath xpath = factory.newXPath();
+    XPathExpression expr = xpath.compile("/EDI/UNB/@att3");
+
+    String result = expr.evaluate(document, XPathConstants.STRING);
+
+    Assert.assertEquals(result, "3")
+  }
+
   private Document getDocument(String ediSource) {
 
     Transformer transformer = TransformerFactory.newInstance().newTransformer();

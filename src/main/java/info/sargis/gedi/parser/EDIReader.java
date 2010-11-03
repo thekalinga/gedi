@@ -9,7 +9,6 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.IOException;
 import java.io.PushbackReader;
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -19,7 +18,7 @@ import java.util.Scanner;
  * User: Sargis Harutyunyan
  * Date: Oct 29, 2010
  */
-public class EDIReader implements XMLReader, Parser {
+public class EDIReader implements XMLReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EDIReader.class);
 
@@ -31,7 +30,7 @@ public class EDIReader implements XMLReader, Parser {
     public static final String DS = "DS";
     public static final String DE = "DE";
 
-    private final EDIReaderHelper ediReaderHelper = new EDIReaderHelper();
+    private final EDIRegexSupport ediRegexSupport = EDIRegexSupport.INSTANCE;
 
     private ContentHandler contentHandler;
     private ErrorHandler errorHandler;
@@ -87,10 +86,6 @@ public class EDIReader implements XMLReader, Parser {
     }
 
     @Override
-    public void setLocale(Locale locale) throws SAXException {
-    }
-
-    @Override
     public void setEntityResolver(EntityResolver resolver) {
     }
 
@@ -101,10 +96,6 @@ public class EDIReader implements XMLReader, Parser {
 
     @Override
     public void setDTDHandler(DTDHandler handler) {
-    }
-
-    @Override
-    public void setDocumentHandler(DocumentHandler handler) {
     }
 
     @Override
@@ -120,7 +111,7 @@ public class EDIReader implements XMLReader, Parser {
         UNASegment unaSegment = readUNASegment(reader);
         LOGGER.debug("Dumping UNA Segment: {}", unaSegment);
 
-        String segmentSplitPattern = ediReaderHelper.createSegmentSplitPattern(unaSegment);
+        String segmentSplitPattern = ediRegexSupport.createSegmentSplitPattern(unaSegment);
 
         Scanner scanner = new Scanner(reader);
         scanner.useDelimiter(segmentSplitPattern);
@@ -174,11 +165,16 @@ public class EDIReader implements XMLReader, Parser {
     }
 
     private void parseSegment(String segment, UNASegment unaSegment) throws SAXException {
-        String dataElemSplitPattern = ediReaderHelper.createDataElemSplitPattern(unaSegment);
+        String dataElemSplitPattern = ediRegexSupport.createDataElemSplitPattern(unaSegment);
         String[] simpleDataElements = segment.split(dataElemSplitPattern);
 
-        String tag = simpleDataElements[0]; //TODO: tag with attributes see draft doc
-        contentHandler.startElement(EMPTY_URI, tag, tag, EMPTY_ATTS);
+        String tag = simpleDataElements[0];
+
+        SegmentTagBuilder segmentTagBuilder = new SegmentTagBuilder(unaSegment);
+        SegmentTag segmentTag = segmentTagBuilder.buildTag(tag);
+
+        String segmentCode = segmentTag.getSegmentCode();
+        contentHandler.startElement(EMPTY_URI, segmentCode, segmentCode, getAttributesListFromSegmentTag(segmentTag));
 
         for (int index = 1; index < simpleDataElements.length; index++) {
             String dataElementEDI = simpleDataElements[index];
@@ -188,9 +184,21 @@ public class EDIReader implements XMLReader, Parser {
         contentHandler.endElement(EMPTY_URI, tag, tag);
     }
 
+    private Attributes getAttributesListFromSegmentTag(SegmentTag segmentTag) {
+        int index = 1;
+
+        AttributesImpl attributes = new AttributesImpl();
+        for (String nestedElem : segmentTag.getNestedElements()) {
+            String attributeName = String.format("att%s", index);
+            attributes.addAttribute(EMPTY_URI, attributeName, attributeName, "CDATA", nestedElem);
+            ++index;
+        }
+
+        return attributes;
+    }
 
     private void parseDataElements(String dataElement, UNASegment unaSegment) throws SAXException {
-        String compositeDataElemSplitPattern = ediReaderHelper.createCompositeDataElemSplitPattern(unaSegment);
+        String compositeDataElemSplitPattern = ediRegexSupport.createCompositeDataElemSplitPattern(unaSegment);
 
         String[] compositeElements = dataElement.split(compositeDataElemSplitPattern);
 

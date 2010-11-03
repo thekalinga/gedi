@@ -16,12 +16,12 @@ public class EDIReaderHelperTest {
 
     private final UNASegment defaultUnaSegment = new UNASegment();
 
-    private EDIReaderHelper ediReaderHelper;
+    private EDIRegexSupport ediReaderHelper;
     private UNASegment customUnaSegment;
 
     @BeforeMethod
     public void setUp() {
-        ediReaderHelper = new EDIReaderHelper();
+        ediReaderHelper = new EDIRegexSupport();
         customUnaSegment = createCustomUnaSegment();
     }
 
@@ -45,7 +45,7 @@ public class EDIReaderHelperTest {
 
     @Test
     public void testEscapeForMetaCharacters() throws Exception {
-        char[] metaChars = EDIReaderHelper.REGEX_META_CHARS;
+        char[] metaChars = EDIRegexSupport.REGEX_META_CHARS;
         for (char metaChar : metaChars) {
             Assert.assertEquals(ediReaderHelper.escapeMetaCharacters(metaChar), "\\" + String.valueOf(metaChar));
         }
