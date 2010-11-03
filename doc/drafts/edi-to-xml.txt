@@ -17,7 +17,12 @@ UNB:1:2+UNOB:1+gslg071:ZZ+gcms003:ZZ+101013:1129+1013115727000++CLSVAL'
         <DE>101013</DE>
         <DE>1129</DE>
     </DS>
-    <DE>1013115727000</DE>
-    <DE></DE>
-    <DE>CLSVAL</DE>
+    <DS>
+        <DE>1013115727000</DE>
+    </DS>
+    <DS></DS>
+    <DS></DS>
+    <DS>
+        <DE>CLSVAL</DE>
+    </DS>      
 </UNB>

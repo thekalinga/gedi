@@ -40,11 +40,13 @@ class FunctionalGroupPayload extends DataSupportSegment {
     StringBuilder sb = new StringBuilder()
 
     UNGSegment ungSegment = getUngSegment()
-    sb << ungSegment.toEDI()
+    String ungEDI = ungSegment.toEDI()
+
+    sb << ungEDI
     messagePayloads.each { seg ->
       sb << seg.toEDI()
     }
-    sb << getUneSegment(ungSegment).toEDI()
+    sb << getUneSegment(ungEDI).toEDI()
 
     return sb.toString()
   }
@@ -53,9 +55,9 @@ class FunctionalGroupPayload extends DataSupportSegment {
     return new UNGSegment(interchangeMessage: interchangeMessage, ediDataString: ediDataString)
   }
 
-  private UNESegment getUneSegment(UNGSegment ungSegment) {
+  private UNESegment getUneSegment(String ungEDI) {
     UNESegment uneSegment = new UNESegment(
-            msgCount: messagePayloads.size(), grpRefNbr: ungSegment.msgRefNbr
+            msgCount: messagePayloads.size(), ungEDI: ungEDI
     )
     uneSegment.interchangeMessage = interchangeMessage
 

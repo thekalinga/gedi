@@ -39,11 +39,13 @@ class MessagePayload extends DataSupportSegment {
     StringBuilder sb = new StringBuilder()
 
     UNHSegment unhSegment = getUnhSegment()
-    sb << unhSegment.toEDI()
+    String unhEDI = unhSegment.toEDI()
+
+    sb << unhEDI
     userSegments.each { seg ->
       sb << seg.toEDI()
     }
-    sb << getUntSegment(unhSegment).toEDI()
+    sb << getUntSegment(unhEDI).toEDI()
 
     return sb.toString()
   }
@@ -52,9 +54,9 @@ class MessagePayload extends DataSupportSegment {
     return new UNHSegment(interchangeMessage: interchangeMessage, ediDataString: ediDataString)
   }
 
-  UNTSegment getUntSegment(UNHSegment unhSegment) {
+  UNTSegment getUntSegment(String unhEDI) {
     UNTSegment untSegment = new UNTSegment(
-            msgCount: userSegments.size(), msgRefNbr: unhSegment.msgRefNbr
+            msgCount: userSegments.size(), unhEDI: unhEDI
     )
     untSegment.interchangeMessage = interchangeMessage
 

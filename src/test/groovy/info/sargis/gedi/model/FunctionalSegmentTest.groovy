@@ -35,12 +35,12 @@ class FunctionalSegmentTest {
       C01+'
       C22+'
       C55+'
-      UNT+3+UNH0111DUMMY'
+      UNT+3+'
       UNH+'
       X01+'
       X22+'
-      UNT+2+UNH0111DUMMY'
-      UNE+2+UNG0111DUMMY'
+      UNT+2+'
+      UNE+2+'
     '''
     Assert.assertEquals(functionalSegment.toEDI(), expectedEDI.stripIndent());
   }

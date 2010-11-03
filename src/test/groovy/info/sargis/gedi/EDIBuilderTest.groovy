@@ -57,7 +57,7 @@ class EDIBuilderTest {
 
         UNH {
           data {
-            "001" + ["CLSVAL", 1, 1000, "MN"]
+            "002" + ["CLSVAL", 1, 1000, "MN"]
           }
 
 
@@ -104,16 +104,16 @@ class EDIBuilderTest {
       CS0+SSS:SARG:+12222+3666'
       CS1+:NNN+12222+3666'
       CS2+366+12222+::::REF454'
-      UNT+3+UNH0111DUMMY'
-      UNH+001+CLSVAL:1:1000:MN'
+      UNT+3+001'
+      UNH+002+CLSVAL:1:1000:MN'
       XS0+XXX::233:DD+12222.33+3666'
       XS1+3444'
       ITM+1256.23+20+DESC LINE 1:DESC LINE 2'
       TAX:1:1+DTY+128.23'
       TAX:1:2+CUD+500'
-      UNT+5+UNH0111DUMMY'
-      UNE+2+UNG0111DUMMY'
-      UNZ+1+UNB0111DUMMY'
+      UNT+5+002'
+      UNE+2+CTRLREF'
+      UNZ+1+1013115727000'
       '''
 
     Assert.assertEquals(sw.toString(), expectedEDI.stripIndent())
@@ -169,8 +169,8 @@ class EDIBuilderTest {
       ITM+1256.23+20+DESC LINE 1:DESC LINE 2'
       TAX:1:1+CUD+500'
       TAX:1:2+CUD+500'
-      UNT+4+UNH0111DUMMY'
-      UNZ+1+UNB0111DUMMY'
+      UNT+4+001'
+      UNZ+1+1013115727000'
       '''
 
     Assert.assertEquals(sw.toString(), expectedEDI.stripIndent())

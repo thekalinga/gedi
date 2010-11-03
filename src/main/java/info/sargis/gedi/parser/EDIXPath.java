@@ -2,6 +2,7 @@ package info.sargis.gedi.parser;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
@@ -98,7 +99,7 @@ public class EDIXPath implements XPath {
     }
 
     private Document getDocument(InputSource inputSource) throws TransformerException {
-        EDIReader ediReader = new EDIReader();
+        XMLReader ediReader = new EDIReader();
         return SAX2DOM.transform(ediReader, inputSource);
     }
 

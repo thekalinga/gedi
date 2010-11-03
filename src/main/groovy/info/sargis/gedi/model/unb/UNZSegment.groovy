@@ -1,7 +1,11 @@
 package info.sargis.gedi.model.unb
 
+import info.sargis.gedi.EDIBuilderException
 import info.sargis.gedi.model.InterchangeMessage
 import info.sargis.gedi.model.seg.EDISegment
+import info.sargis.gedi.parser.EDIXPath
+import javax.xml.xpath.XPathExpressionException
+import org.xml.sax.InputSource
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -13,7 +17,7 @@ import info.sargis.gedi.model.seg.EDISegment
 class UNZSegment extends EDISegment {
 
   Integer msgCount
-  String ctrlRef
+  String unbEdi
 
   def UNZSegment() {
     tagName = "UNZ"
@@ -24,7 +28,21 @@ class UNZSegment extends EDISegment {
   }
 
   String toEDI() {
-    ediDataString = msgCount + interchangeMessage.dataElemSeparator + ctrlRef
+    prepareEdiData()
     return super.toEDI()
   }
+
+  private def prepareEdiData() {
+    ediDataString = msgCount + interchangeMessage.dataElemSeparator + getUNBMsgRefNumber()
+  }
+
+  private String getUNBMsgRefNumber() {
+    try {
+      EDIXPath ediXPath = new EDIXPath()
+      return ediXPath.evaluate("/EDI/UNB/DS[5]/DE[1]/text()", new InputSource(new StringReader(unbEdi)))
+    } catch (XPathExpressionException ex) {
+      throw new EDIBuilderException("Cannot get UNB 'Interchange Control Reference'", ex)
+    }
+  }
+
 }

@@ -202,23 +202,14 @@ public class EDIReader implements XMLReader {
 
         String[] compositeElements = dataElement.split(compositeDataElemSplitPattern);
 
-        if (isCompositeData(compositeElements)) {
-            processCompositeElements(compositeElements);
-        } else {
-            processSimpleElement(compositeElements[0]);
-        }
+        processCompositeElements(compositeElements);
     }
 
     private void processCompositeElements(String[] compositeElements) throws SAXException {
         contentHandler.startElement(EMPTY_URI, DS, DS, EMPTY_ATTS);
 
         for (int index = 0; index < compositeElements.length; index++) {
-            String compositeElementEDI = compositeElements[index];
-            char[] chars = compositeElementEDI.toCharArray();
-
-            contentHandler.startElement(EMPTY_URI, DE, DE, EMPTY_ATTS);
-            contentHandler.characters(chars, 0, chars.length);
-            contentHandler.endElement(EMPTY_URI, DE, DE);
+            processSimpleElement(compositeElements[index]);
         }
 
         contentHandler.endElement(EMPTY_URI, DS, DS);
@@ -231,10 +222,6 @@ public class EDIReader implements XMLReader {
         contentHandler.characters(chars, 0, chars.length);
 
         contentHandler.endElement(EMPTY_URI, DE, DE);
-    }
-
-    private boolean isCompositeData(String[] compositeElements) {
-        return compositeElements.length > 1;
     }
 
     @Override

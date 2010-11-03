@@ -50,14 +50,15 @@ class InterchangePayload extends DataSupportSegment {
     StringBuilder sb = new StringBuilder()
 
     UNBSegment unbSegment = getUNBSegment()
-    sb << unbSegment.toEDI()
+    String unbEDI = unbSegment.toEDI()
+    sb << unbEDI
 
     List payloads = getPayloadsWithAssertion()
     payloads.each { Segment seg ->
       sb << seg.toEDI()
     }
 
-    sb << getUnzSegment(unbSegment).toEDI()
+    sb << getUnzSegment(unbEDI).toEDI()
     return sb.toString()
   }
 
@@ -65,9 +66,9 @@ class InterchangePayload extends DataSupportSegment {
     return new UNBSegment(interchangeMessage: interchangeMessage, ediDataString: ediDataString)
   }
 
-  private UNZSegment getUnzSegment(UNBSegment unbSegment) {
+  private UNZSegment getUnzSegment(String unbEdi) {
     UNZSegment unzSegment = new UNZSegment(
-            msgCount: getMessageCount(), ctrlRef: unbSegment.msgRefNbr
+            msgCount: getMessageCount(), unbEdi: unbEdi
     )
     unzSegment.interchangeMessage = interchangeMessage
 
