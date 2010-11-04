@@ -60,7 +60,7 @@ class EDIBuildingAndParsingTest {
 
     Document document = getDocument(sw.toString())
 
-    Assert.assertEquals(evaluateXPathExpression(document, "/EDI/XS0/DS[1]/DE[4]/text()"), "D:D")
+    Assert.assertEquals(evaluateXPathExpression(document, "/EDI/XS0/DS[1]/DE[4]/text()"), DS1_DE4)
     Assert.assertEquals(evaluateXPathExpression(document, "/EDI/XS0/DS[3]/DE[1]/text()"), DS3_DE1)
     Assert.assertEquals(evaluateXPathExpression(document, "/EDI/XS0/DS[4]/DE[1]/text()"), DS4_DE1)
   }

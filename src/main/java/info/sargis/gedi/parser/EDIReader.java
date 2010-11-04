@@ -220,8 +220,10 @@ public class EDIReader implements XMLReader {
     private void processCompositeElements(String[] compositeElements) throws SAXException {
         contentHandler.startElement(EMPTY_URI, DS, DS, EMPTY_ATTS);
 
-        for (int index = 0; index < compositeElements.length; index++) {
-            processSimpleElement(compositeElements[index]);
+        if (!isEmptyCompositeElement(compositeElements)) {
+            for (String compositeElement : compositeElements) {
+                processSimpleElement(compositeElement);
+            }
         }
 
         contentHandler.endElement(EMPTY_URI, DS, DS);
@@ -236,6 +238,10 @@ public class EDIReader implements XMLReader {
         contentHandler.characters(chars, 0, chars.length);
 
         contentHandler.endElement(EMPTY_URI, DE, DE);
+    }
+
+    private boolean isEmptyCompositeElement(String[] compositeElements) {
+        return compositeElements[0].isEmpty() && compositeElements.length == 1;
     }
 
     @Override
