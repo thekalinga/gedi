@@ -27,9 +27,9 @@ class UserSegmentTest {
 
     UserSegment segment = interchangeMessage.createUserSegment(tag)
     segment.data {
-      ["GCC", "", "XXX"] + 1222 + "ZSSS01"
+      ["XCC", "", "XXX"] + 1222 + "ZSSS01"
     }
 
-    Assert.assertEquals(segment.toEDI(), "${tag}+GCC::XXX+1222+ZSSS01'${segment.interchangeMessage.eol}");
+    Assert.assertEquals(segment.toEDI(), "${tag}+XCC::XXX+1222+ZSSS01'${segment.interchangeMessage.eol}");
   }
 }

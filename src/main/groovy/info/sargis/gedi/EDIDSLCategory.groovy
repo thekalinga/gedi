@@ -4,6 +4,7 @@ import info.sargis.gedi.model.una.UNASegment
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
+import static info.sargis.gedi.utils.EDIEscapeSupport.escape
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -40,54 +41,98 @@ class EDIDSLCategory {
     }
   }
 
-  static String plus(List self, List list) {
+  // ------------------------------ Start of list category ------------------------------ //
+
+  static EDIString plus(List self, List list) {
     def selfEdi = toEDICompositeElement(self)
     def listEdi = toEDICompositeElement(list)
-    "${selfEdi}${dataElemSeparator}${listEdi}"
+    new EDIString("${selfEdi}${dataElemSeparator}${listEdi}")
   }
 
-  static String plus(List self, String str) {
+  static EDIString plus(List self, String str) {
     def selfEdi = toEDICompositeElement(self)
-    "${selfEdi}${dataElemSeparator}${str}"
+    new EDIString("${selfEdi}${dataElemSeparator}${escape(str)}")
   }
 
-  static String plus(List self, Number number) {
+  static EDIString plus(List self, EDIString str) {
     def selfEdi = toEDICompositeElement(self)
-    "${selfEdi}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}"
+    new EDIString("${selfEdi}${dataElemSeparator}${str}")
   }
 
-
-  static String plus(Number self, Number number) {
-    "${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${number}"
+  static EDIString plus(List self, Number number) {
+    def selfEdi = toEDICompositeElement(self)
+    new EDIString("${selfEdi}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}")
   }
 
-  static String plus(Number self, String str) {
-    "${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${str}"
+  // ------------------------------ End of list category ------------------------------ //
+
+  // ------------------------------ Start of number category ------------------------------ //
+
+  static EDIString plus(Number self, Number number) {
+    new EDIString("${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${number}")
   }
 
-  static String plus(Number self, List list) {
+  static EDIString plus(Number self, String str) {
+    new EDIString("${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${escape(str)}")
+  }
+
+  static EDIString plus(Number self, EDIString str) {
+    new EDIString("${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${str}")
+  }
+
+  static EDIString plus(Number self, List list) {
     def listEdi = toEDICompositeElement(list)
-    "${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${listEdi}"
+    new EDIString("${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${listEdi}")
   }
 
+  // ------------------------------ End of number category ------------------------------ //
 
-  static String plus(String self, String str) {
-    "${self}${dataElemSeparator}${str}"
+  // ------------------------------ Start of String category ------------------------------ //
+
+  static EDIString plus(String self, String str) {
+    new EDIString("${escape(self)}${dataElemSeparator}${escape(str)}")
   }
 
-  static String plus(String self, List list) {
+  static EDIString plus(String self, EDIString str) {
+    new EDIString("${escape(self)}${dataElemSeparator}${str}")
+  }
+
+  static EDIString plus(String self, List list) {
     def listEdi = toEDICompositeElement(list)
-    "${self}${dataElemSeparator}${listEdi}"
+    new EDIString("${escape(self)}${dataElemSeparator}${listEdi}")
   }
 
-  static String plus(String self, Number number) {
-    "${self}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}"
+  static EDIString plus(String self, Number number) {
+    new EDIString("${escape(self)}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}")
+  }
+  // ------------------------------ End of String category ------------------------------ //
+
+  // ------------------------------ Start of EDIString category ------------------------------ //
+
+  static EDIString plus(EDIString self, EDIString str) {
+    new EDIString("${self}${dataElemSeparator}${str}")
   }
 
+  static EDIString plus(EDIString self, String str) {
+    new EDIString("${self}${dataElemSeparator}${escape(str)}")
+  }
 
+  static EDIString plus(EDIString self, List list) {
+    def listEdi = toEDICompositeElement(list)
+    new EDIString("${self}${dataElemSeparator}${listEdi}")
+  }
+
+  static EDIString plus(EDIString self, Number number) {
+    new EDIString("${self}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}")
+  }
+
+  // ------------------------------ End of EDIString category ------------------------------ //
 
   private static String toEDICompositeElement(List list) {
-    list.join(compDataSeparator)
+    def escapedList = list.collect {
+      escape(it.toString())
+    }
+    escapedList.join(compDataSeparator)
   }
 
   static String formatNumber(Number self, char decSeparator) {
