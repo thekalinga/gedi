@@ -14,21 +14,28 @@ import java.util.regex.Pattern;
  */
 public class EDIEscapeSupport {
 
-    private final Pattern pattern;
-    private final String replaceExpression;
+    private final Pattern escapePattern;
+    private final String escapeReplaceExpr;
+
+    private final Pattern unescapePattern;
+    private final String unescapePatternReplaceExpr;
 
     public EDIEscapeSupport(UNASegment unaSegment) {
-        pattern = Pattern.compile("(:|\\+|\\.|\\?|')");
-        replaceExpression = String.format("%s$1", unaSegment.getReleaseIndicator());
+        escapePattern = Pattern.compile("(:|\\+|\\.|\\?|')");
+        escapeReplaceExpr = String.format("%s$1", unaSegment.getReleaseIndicator());
+
+        unescapePattern = Pattern.compile(String.format("\\%s(:|\\+|\\.|\\?|')", unaSegment.getReleaseIndicator()));
+        unescapePatternReplaceExpr = String.format("$1", unaSegment.getReleaseIndicator());
     }
 
     public String escape(String ediData) {
-        Matcher matcher = pattern.matcher(ediData);
-        return matcher.replaceAll(replaceExpression);
+        Matcher matcher = escapePattern.matcher(ediData);
+        return matcher.replaceAll(escapeReplaceExpr);
     }
 
     public String unescape(String ediData) {
-        return ediData;
+        Matcher matcher = unescapePattern.matcher(ediData);
+        return matcher.replaceAll(unescapePatternReplaceExpr);
     }
 
 }

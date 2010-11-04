@@ -1,6 +1,7 @@
 package info.sargis.gedi.parser;
 
 import info.sargis.gedi.model.una.UNASegment;
+import info.sargis.gedi.utils.EDIEscapeSupport;
 import info.sargis.gedi.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class EDIReader implements XMLReader {
 
     private ContentHandler contentHandler;
     private ErrorHandler errorHandler;
+    public EDIEscapeSupport escapeSupport;
 
     private final UNASegment defaultUnaSegment;
 
@@ -111,13 +113,23 @@ public class EDIReader implements XMLReader {
         UNASegment unaSegment = readUNASegment(reader);
         LOGGER.debug("Dumping UNA Segment: {}", unaSegment);
 
+        doScan(unaSegment, reader);
+    }
+
+    private void configEscapeSupport(UNASegment unaSegment) {
+        escapeSupport = new EDIEscapeSupport(unaSegment);
+    }
+
+    private void doScan(UNASegment unaSegment, PushbackReader reader) throws SAXException, IOException {
+        configEscapeSupport(unaSegment);
+
         String segmentSplitPattern = ediRegexSupport.createSegmentSplitPattern(unaSegment);
 
         Scanner scanner = new Scanner(reader);
         scanner.useDelimiter(segmentSplitPattern);
 
         contentHandler.startDocument();
-        doScan(scanner, unaSegment);
+        startEDIDocument(scanner, unaSegment);
         contentHandler.endDocument();
 
         if (scanner.ioException() != null) {
@@ -143,7 +155,7 @@ public class EDIReader implements XMLReader {
 
                 return unaSegment;
             } else {
-                LOGGER.debug("NotFound UNA Segment in EDI Interchange, switch to default....");
+                LOGGER.debug("Not found UNA Segment in EDI Interchange, switching to default....");
                 reader.unread(unaChars);
                 return defaultUnaSegment;
             }
@@ -153,7 +165,7 @@ public class EDIReader implements XMLReader {
         }
     }
 
-    private void doScan(Scanner scanner, UNASegment unaSegment) throws SAXException {
+    private void startEDIDocument(Scanner scanner, UNASegment unaSegment) throws SAXException {
         contentHandler.startElement(EMPTY_URI, EDI, EDI, EMPTY_ATTS);
         while (scanner.hasNext()) {
             String segmentEDI = scanner.next().trim().replaceAll("\\n", "").replaceAll("\\t", "");
@@ -216,9 +228,11 @@ public class EDIReader implements XMLReader {
     }
 
     private void processSimpleElement(String compositeElement) throws SAXException {
+        String unescapedString = escapeSupport.unescape(compositeElement);
+
         contentHandler.startElement(EMPTY_URI, DE, DE, EMPTY_ATTS);
 
-        char[] chars = compositeElement.toCharArray();
+        char[] chars = unescapedString.toCharArray();
         contentHandler.characters(chars, 0, chars.length);
 
         contentHandler.endElement(EMPTY_URI, DE, DE);
