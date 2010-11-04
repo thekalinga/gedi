@@ -1,6 +1,6 @@
 package info.sargis.gedi.utils;
 
-import info.sargis.gedi.model.una.UNASegment;
+import info.sargis.gedi.builder.model.una.UNASegment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

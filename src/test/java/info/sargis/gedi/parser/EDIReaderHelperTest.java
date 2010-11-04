@@ -1,6 +1,6 @@
 package info.sargis.gedi.parser;
 
-import info.sargis.gedi.model.una.UNASegment;
+import info.sargis.gedi.builder.model.una.UNASegment;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

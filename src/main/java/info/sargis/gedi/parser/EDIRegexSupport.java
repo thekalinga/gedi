@@ -1,6 +1,6 @@
 package info.sargis.gedi.parser;
 
-import info.sargis.gedi.model.una.UNASegment;
+import info.sargis.gedi.builder.model.una.UNASegment;
 
 /**
  * Copyrights 2002-2010 Webb Fontaine

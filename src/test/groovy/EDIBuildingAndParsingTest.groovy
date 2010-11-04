@@ -1,4 +1,4 @@
-import info.sargis.gedi.EDIBuilder
+import info.sargis.gedi.builder.EDIBuilder
 import info.sargis.gedi.parser.EDIReader
 import info.sargis.gedi.parser.EDIXPath
 import info.sargis.gedi.parser.SAX2DOM
@@ -19,6 +19,10 @@ import org.xml.sax.InputSource
  */
 class EDIBuildingAndParsingTest {
 
+  private static final String DS1_DE4 = "D:D"
+  private static final String DS3_DE1 = "SSS:XX+X"
+  private static final String DS4_DE1 = "XXX?AAA"
+
   private EDIBuilder ediBuilder
   private EDIXPath ediXPath
 
@@ -31,9 +35,6 @@ class EDIBuildingAndParsingTest {
   @Test
   public void testBuildingAndParsingEDIWithEDISpecialCharacters() throws Exception {
 
-    String DS1_DE4 = "D:D"
-    String DS3_DE1 = "SSS:XX+X"
-    String DS4_DE1 = "XXX?AAA"
 
     ediBuilder.UNB {
       data {
