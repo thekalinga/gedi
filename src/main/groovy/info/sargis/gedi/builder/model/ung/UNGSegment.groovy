@@ -12,8 +12,6 @@ import info.sargis.gedi.builder.model.seg.EDISegment
  */
 class UNGSegment extends EDISegment {
 
-  String msgRefNbr = "UNG0111DUMMY"
-
   def UNGSegment() {
     tagName = "UNG"
   }

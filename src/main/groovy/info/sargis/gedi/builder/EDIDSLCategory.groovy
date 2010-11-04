@@ -17,7 +17,7 @@ class EDIDSLCategory {
 
   private static final UNASegment DEFAULT_UNA = new UNASegment();
 
-  private static UNASegment currentUnaConfig
+  public static UNASegment currentUnaConfig
 
   public static String dataElemSeparator
   public static String compDataSeparator

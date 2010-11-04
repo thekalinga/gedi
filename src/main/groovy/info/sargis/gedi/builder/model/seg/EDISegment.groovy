@@ -26,8 +26,9 @@ class EDISegment extends DataSupportSegment {
   public void setTagData(Object tagData) {
     def list
 
-    if (tagData instanceof List) list = tagData
-    else {
+    if (tagData instanceof List) {
+      list = tagData
+    } else {
       list = [tagData.toString()]
     }
 

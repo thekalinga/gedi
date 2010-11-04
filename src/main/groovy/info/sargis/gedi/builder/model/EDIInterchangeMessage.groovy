@@ -3,8 +3,6 @@ package info.sargis.gedi.builder.model
 import info.sargis.gedi.EDIBuilderException
 import info.sargis.gedi.builder.model.seg.UserSegment
 import info.sargis.gedi.builder.model.una.UNASegment
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -14,8 +12,6 @@ import org.slf4j.LoggerFactory
  * Date: Oct 25, 2010
  */
 class EDIInterchangeMessage implements Segment, InterchangeMessage {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(EDIInterchangeMessage.class);
 
   private static final String EOL = System.getProperty("line.separator");
 

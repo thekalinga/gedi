@@ -16,13 +16,19 @@ class EDIString {
   }
 
   boolean equals(o) {
-    if (this.is(o)) return true;
 
-    if (getClass() != o.class) return false;
+    if (this.is(o)) {
+      return true;
+    }
+
+    if (getClass() != o.class) {
+      return false;
+    }
 
     EDIString ediString1 = (EDIString) o;
-
-    if (ediString != ediString1.ediString) return false;
+    if (ediString != ediString1.ediString) {
+      return false;
+    }
 
     return true;
   }
