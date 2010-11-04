@@ -1,10 +1,10 @@
 package info.sargis.gedi
 
 import info.sargis.gedi.model.una.UNASegment
+import info.sargis.gedi.utils.EDIEscapeSupport
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
-import static info.sargis.gedi.utils.EDIEscapeSupport.escape
 
 /**
  * Copyrights 2002-2010 Webb Fontaine
@@ -23,6 +23,8 @@ class EDIDSLCategory {
   public static String compDataSeparator
   public static String decimalNotation
 
+  public static EDIEscapeSupport escapeSupport
+
   static {
     configEDIDSLSupportCategory(DEFAULT_UNA)
   }
@@ -38,6 +40,8 @@ class EDIDSLCategory {
       dataElemSeparator = una.dataElemSeparator
       compDataSeparator = una.compDataSep
       decimalNotation = una.decimalNotation
+
+      escapeSupport = new EDIEscapeSupport(una)
     }
   }
 
@@ -51,7 +55,7 @@ class EDIDSLCategory {
 
   static EDIString plus(List self, String str) {
     def selfEdi = toEDICompositeElement(self)
-    new EDIString("${selfEdi}${dataElemSeparator}${escape(str)}")
+    new EDIString("${selfEdi}${dataElemSeparator}${escapeSupport.escape(str)}")
   }
 
   static EDIString plus(List self, EDIString str) {
@@ -73,7 +77,7 @@ class EDIDSLCategory {
   }
 
   static EDIString plus(Number self, String str) {
-    new EDIString("${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${escape(str)}")
+    new EDIString("${formatNumber(self, decimalNotation as char)}${dataElemSeparator}${escapeSupport.escape(str)}")
   }
 
   static EDIString plus(Number self, EDIString str) {
@@ -90,20 +94,20 @@ class EDIDSLCategory {
   // ------------------------------ Start of String category ------------------------------ //
 
   static EDIString plus(String self, String str) {
-    new EDIString("${escape(self)}${dataElemSeparator}${escape(str)}")
+    new EDIString("${escapeSupport.escape(self)}${dataElemSeparator}${escapeSupport.escape(str)}")
   }
 
   static EDIString plus(String self, EDIString str) {
-    new EDIString("${escape(self)}${dataElemSeparator}${str}")
+    new EDIString("${escapeSupport.escape(self)}${dataElemSeparator}${str}")
   }
 
   static EDIString plus(String self, List list) {
     def listEdi = toEDICompositeElement(list)
-    new EDIString("${escape(self)}${dataElemSeparator}${listEdi}")
+    new EDIString("${escapeSupport.escape(self)}${dataElemSeparator}${listEdi}")
   }
 
   static EDIString plus(String self, Number number) {
-    new EDIString("${escape(self)}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}")
+    new EDIString("${escapeSupport.escape(self)}${dataElemSeparator}${formatNumber(number, decimalNotation as char)}")
   }
   // ------------------------------ End of String category ------------------------------ //
 
@@ -114,7 +118,7 @@ class EDIDSLCategory {
   }
 
   static EDIString plus(EDIString self, String str) {
-    new EDIString("${self}${dataElemSeparator}${escape(str)}")
+    new EDIString("${self}${dataElemSeparator}${escapeSupport.escape(str)}")
   }
 
   static EDIString plus(EDIString self, List list) {
@@ -130,7 +134,7 @@ class EDIDSLCategory {
 
   private static String toEDICompositeElement(List list) {
     def escapedList = list.collect {
-      escape(it.toString())
+      escapeSupport.escape(it.toString())
     }
     escapedList.join(compDataSeparator)
   }

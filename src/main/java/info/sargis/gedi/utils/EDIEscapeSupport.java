@@ -1,5 +1,7 @@
 package info.sargis.gedi.utils;
 
+import info.sargis.gedi.model.una.UNASegment;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,14 +14,20 @@ import java.util.regex.Pattern;
  */
 public class EDIEscapeSupport {
 
-    private static final Pattern pattern = Pattern.compile("(:|\\+|\\.|\\?|')");
+    private final Pattern pattern;
+    private final String replaceExpression;
 
-    public static String escape(String ediData) {
-        Matcher matcher = pattern.matcher(ediData);
-        return matcher.replaceAll("?$1");
+    public EDIEscapeSupport(UNASegment unaSegment) {
+        pattern = Pattern.compile("(:|\\+|\\.|\\?|')");
+        replaceExpression = String.format("%s$1", unaSegment.getReleaseIndicator());
     }
 
-    public static String unescape(String ediData) {
+    public String escape(String ediData) {
+        Matcher matcher = pattern.matcher(ediData);
+        return matcher.replaceAll(replaceExpression);
+    }
+
+    public String unescape(String ediData) {
         return ediData;
     }
 
