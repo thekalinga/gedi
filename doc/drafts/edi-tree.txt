@@ -1,0 +1,38 @@
+def ediTree = new EDI2XMLBuilder(writer)
+ediTree.FCVR {
+    BegOfMessage('BGM') {
+        DocCodeName(field: 1, component: 4)
+        DocIdent(field: 1)
+    }
+    DateAndTime('DTM', field: 0, component: 4)
+    FcvrRef('RFF') {
+        RefQualifier(field: 1, component: 1)
+        RefNber(field: 1, component: 2)
+        FcvrColor(field: 1, component 4)  // FcvrColor(1, 4)  or FcvrColor([1, 4])
+    }
+    Items {
+        listOf()(
+            Item {  // after visiting all fields defined in loop subtree, I will consider ad finish of loop, if I
+                    // encounter trigger segment(first segment in group) I consider as end of loop
+                ItemNumber('LIN', [1, 1])
+                Quantity(QTY) {
+                    Qualifier(1, 1)
+                    Value(1, 2)
+                }
+                Taxes {
+                    listOf()(
+                        Tax(TAX) {
+                            Name(2, 1)
+                            Base(4, 1)
+                            Amount(5, 4)
+                        }
+                    )
+                }
+            }
+        )
+    }
+    SomeXmlTag('SOM', field: 0, component: 4)
+}
+
+
+
